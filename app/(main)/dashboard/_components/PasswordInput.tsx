@@ -3,8 +3,9 @@
 import { Input } from "@/components/ui/input";
 import { EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-export default function InputDemo({ setMonkeyState }: { setMonkeyState: (state: boolean) => void }) {
+export default function InputDemo({ setMonkeyState, register }: { setMonkeyState: (state: boolean) => void, register: ReturnType<typeof useForm>['register']; } ) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => {
@@ -12,14 +13,14 @@ export default function InputDemo({ setMonkeyState }: { setMonkeyState: (state: 
     setIsVisible(newState);
     setMonkeyState(!newState); 
   };
-
   const handleFocus = () => setMonkeyState(true); 
   const handleBlur = () => setMonkeyState(false); 
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <span className="relative">
         <Input
+          {...register('password')}
           className="pe-9"
           placeholder="Password"
           type={isVisible ? "text" : "password"}
