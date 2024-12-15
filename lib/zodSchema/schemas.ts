@@ -30,7 +30,7 @@ export const signUpSchema = z
 
 export const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: passwordSchema,
+  password: z.string().nonempty("Password is required"),
 });
 
 export const authFormSchema = (formType: string) => {
