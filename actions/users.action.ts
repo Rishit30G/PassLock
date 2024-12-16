@@ -3,7 +3,9 @@ import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ID, Query } from "node-appwrite";
+import bcrypt from "bcryptjs";
 
 export const sendEmailOTP = async (email: string) => {
   const { account } = await createAdminClient();
@@ -57,6 +59,8 @@ export const createAccount = async (
     if (existingUser) {
       throw new Error("User already exists");
     }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
     const { databases, account } = await createAdminClient();
     const newUser = await account.create(ID.unique(), data.email, data.password);
 
@@ -69,7 +73,7 @@ export const createAccount = async (
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        password: data.password,
+        password: hashedPassword,
       }
     );
     return parseStringify({ message: "Account created successfully" });
@@ -87,7 +91,7 @@ export const getAccount = async (data: { email: string; password: string }) => {
       throw new Error("User does not exist");
     }
 
-    const isPasswordValid = existingUser.password === password;
+    const isPasswordValid = await bcrypt.compare(password, existingUser.password);
     if (!isPasswordValid) {
       throw new Error("Invalid email or password");
     }
@@ -112,10 +116,22 @@ export const getCurrentUser = async () => {
       appwriteConfig.usersCollectionId,
       [Query.equal("accountId", result.$id)]
     );
-    console.log(user);
     if (user.total <= 0) return null;
     return parseStringify(user.documents[0]);
   } catch (error) {
     throw new Error(error?.message || "Something went wrong");
   }
 };
+
+export const signOutUser = async () => {
+  const { account } = await createSessionClient(); 
+  try{
+    await account.deleteSession('current'); 
+    (await cookies()).delete("appwrite-session"); 
+  }
+  catch(error){
+    throw new Error("Failed to sign out");
+  }finally{
+    redirect('/sign-in');
+  }
+}
