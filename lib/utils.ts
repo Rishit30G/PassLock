@@ -37,3 +37,7 @@ export function decrypt(encryptedText: string): string {
 export const maskPassword = (password: string) => {
   return '*'.repeat(password.length);
 };
+
+export const generateCircles = (length: number) => {
+  return '●'.repeat(length);
+};
