@@ -5,7 +5,7 @@ import { EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function InputDemo({ setMonkeyState, register }: { setMonkeyState: (state: boolean) => void, register: ReturnType<typeof useForm>['register']; } ) {
+export default function InputDemo({ setMonkeyState, register}: { setMonkeyState: (state: boolean) => void, register: ReturnType<typeof useForm>['register']; } ) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => {

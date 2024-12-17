@@ -3,21 +3,35 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authFormSchema } from "@/lib/zodSchema/schemas";
 import { z } from "zod";
+import { toast } from "sonner";
+import { createAccount, getAccount, getCurrentUser } from "@/actions/users.action";
+import { useRouter } from "next/navigation";
+import OTPForm from "./OTPForm";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 interface FormProps {
   formType: string;
 }
 
 const AuthForm = ({ formType }: FormProps) => {
+  const [showModal, setShowModal] = useState(false);
+  const [accountId, setAccountId] = useState("");
+  const [loading, setLoading] = useState(false);
   const schema = authFormSchema(formType);
+  const router = useRouter();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema), 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -27,47 +41,116 @@ const AuthForm = ({ formType }: FormProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof schema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof schema>) {
+    setLoading(true);
+    if(formType === "sign-up"){
+      try{
+        const result = await createAccount(values);
+        toast.success(result.message);
+        router.push("/sign-in");
+      } catch(error) {
+        toast.error(error.message);
+      }
+      finally{
+        setLoading(false);
+      }
+   }
+   else if(formType === "sign-in"){
+    try{
+      const {message, accountId} = await getAccount(values);
+      toast.success(message);
+      setShowModal(true);
+      setAccountId(accountId);
+    }catch(error){
+      toast.error(error.message);
+    }
+    finally{
+      setLoading(false);
+    }
+   }
+    
   }
 
   return (
-    <form className="space-y-4 !mt-8 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+    <>
+    <form
+      className="space-y-4 !mt-8 flex flex-col"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {formType === "sign-up" && (
         <div className="flex gap-4">
-          <div className="flex-1 space-y-4">
-            <Input type="text" placeholder="First Name" {...register("firstName")} autoComplete="off"/>
-            {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
+          <div className="flex-1 space-y-2">
+            <Input
+              type="text"
+              placeholder="First Name"
+              {...register("firstName")}
+              autoComplete="off"
+            />
+            {errors.firstName && (
+              <p className="text-red-500 text-sm">{errors.firstName.message}</p>
+            )}
           </div>
-          <div className="flex-1 space-y-4">
-            <Input type="text" placeholder="Last Name" {...register("lastName")}  autoComplete="off"/>
-            {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
+          <div className="flex-1 space-y-2">
+            <Input
+              type="text"
+              placeholder="Last Name"
+              {...register("lastName")}
+              autoComplete="off"
+            />
+            {errors.lastName && (
+              <p className="text-red-500 text-sm">{errors.lastName.message}</p>
+            )}
           </div>
         </div>
       )}
-      <Input type="email" placeholder="Email" {...register("email")}  autoComplete="off"/>
-      {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+      <Input
+        type="email"
+        placeholder="Email"
+        {...register("email")}
+        autoComplete="off"
+      />
+      {errors.email && (
+        <p className="text-red-500 text-sm">{errors.email.message}</p>
+      )}
       <Input type="password" placeholder="Password" {...register("password")} />
-      {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+      {errors.password && (
+        <p className="text-red-500 text-sm">{errors.password.message}</p>
+      )}
       {formType === "sign-up" && (
         <>
-          <Input type="password" placeholder="Confirm Password" {...register("confirmPassword")} />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            {...register("confirmPassword")}
+          />
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.confirmPassword.message}
+            </p>
           )}
         </>
       )}
-      <Button className="w-full">{formType === "sign-up" ? "Sign Up" : "Sign In"}</Button>
+      <Button className={`w-full flex items-center ${loading && 'text-gray-400'}`} disabled={loading}>
+        {formType === "sign-up" ? "Sign Up" : "Sign In"}
+        {
+          loading && <Loader2 className="w-6 h-6 ml-2 animate-spin" />
+        }
+      </Button>
       {formType === "sign-up" ? (
-        <p className="text-center text-sm text-gray-500">
-          Already have an account? <a href="/sign-in">Sign In</a>
+        <p className="text-center text-sm dark:text-gray-500 text-gray-400">
+          Already have an account? <Link href="/sign-in" className="dark:text-gray-400 text-gray-500">Sign In</Link>
         </p>
       ) : (
         <p className="text-center text-sm text-gray-500">
-          Don't have an account? <a href="/sign-up">Sign Up</a>
+          Don't have an account? <Link href="/sign-up" className="dark:text-gray-400 text-gray-500">Sign Up</Link>
         </p>
       )}
     </form>
+    {
+      showModal
+      && <OTPForm accountId={accountId} />
+    }
+    </>
   );
 };
 
