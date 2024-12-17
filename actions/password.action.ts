@@ -74,7 +74,7 @@ export async function updateDetails(documentId: string, data: any) {
         orgName: data.orgName,
         orgUrl: data?.orgUrl || null,
         userName: data?.username || null,
-        password: data.password,
+        password: encrypt(data.password),
       }
     )
     return parseStringify({ message: "Details updated successfully" });
