@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { createAccount, getAccount, getCurrentUser } from "@/actions/users.action";
 import { useRouter } from "next/navigation";
 import OTPForm from "./OTPForm";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 interface FormProps {
@@ -23,6 +23,8 @@ const AuthForm = ({ formType }: FormProps) => {
   const [showModal, setShowModal] = useState(false);
   const [accountId, setAccountId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const schema = authFormSchema(formType);
   const router = useRouter();
 
@@ -112,22 +114,42 @@ const AuthForm = ({ formType }: FormProps) => {
       {errors.email && (
         <p className="text-red-500 text-sm">{errors.email.message}</p>
       )}
-      <Input type="password" placeholder="Password" {...register("password")} />
-      {errors.password && (
-        <p className="text-red-500 text-sm">{errors.password.message}</p>
-      )}
+      <div className="relative">
+          <Input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            {...register("password")}
+          />
+          <div
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 dark:text-gray-500"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <Eye size={12} /> : <EyeOff size={12} />}
+          </div>
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
       {formType === "sign-up" && (
         <>
-          <Input
-            type="password"
-            placeholder="Confirm Password"
-            {...register("confirmPassword")}
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm">
-              {errors.confirmPassword.message}
-            </p>
-          )}
+          <div className="relative">
+            <Input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm Password"
+              {...register("confirmPassword")}
+            />
+            <div
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 dark:text-gray-500"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <Eye size={12} /> : <EyeOff size={12} />}
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
         </>
       )}
       <Button className={`w-full flex items-center ${loading && 'text-gray-400'}`} disabled={loading}>
