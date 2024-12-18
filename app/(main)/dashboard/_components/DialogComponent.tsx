@@ -8,6 +8,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -33,6 +43,7 @@ interface DialogComponentProps {
   item?: any;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccessfulOperation?: () => void;
 }
 
 const DialogComponent = ({
@@ -43,9 +54,11 @@ const DialogComponent = ({
   item,
   isOpen,
   onOpenChange,
+  onSuccessfulOperation,
 }: DialogComponentProps) => {
   const [monkeyState, setMonkeyState] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   // Reset monkey state when dialog opens/closes
   useEffect(() => {
@@ -89,6 +102,7 @@ const DialogComponent = ({
         toast.success(result.message || "Details created successfully");
       }
       onOpenChange(false);
+      onSuccessfulOperation && onSuccessfulOperation();
     } catch (error) {
       console.log(error?.message || "Operation failed");
       toast.error("Something went wrong");
@@ -102,6 +116,7 @@ const DialogComponent = ({
       await deleteDetails(itemID);
       toast.success("Details deleted successfully");
       onOpenChange(false);
+      onSuccessfulOperation && onSuccessfulOperation();
     } catch (error) {
       toast.error(error?.message || "Failed to delete");
     } finally {
@@ -168,7 +183,9 @@ const DialogComponent = ({
               size={18}
             />
             {errors.orgName && (
-              <p className="text-red-500 text-sm mt-2">{errors.orgName.message}</p>
+              <p className="text-red-500 text-sm mt-2">
+                {errors.orgName.message}
+              </p>
             )}
           </div>
 
@@ -177,7 +194,7 @@ const DialogComponent = ({
               placeholder="Organization URL"
               {...register("orgUrl")}
               autoComplete="off"
-              className="pr-12"   
+              className="pr-12"
             />
             <Copy
               className={`absolute right-3 top-1/2 transform -translate-y-1/2 
@@ -194,7 +211,9 @@ const DialogComponent = ({
               size={18}
             />
             {errors.orgUrl && (
-              <p className="text-red-500 text-sm mt-2">{errors.orgUrl.message}</p>
+              <p className="text-red-500 text-sm mt-2">
+                {errors.orgUrl.message}
+              </p>
             )}
           </div>
 
@@ -220,26 +239,51 @@ const DialogComponent = ({
               size={18}
             />
             {errors.username && (
-              <p className="text-red-500 text-sm mt-2">{errors.username.message}</p>
+              <p className="text-red-500 text-sm mt-2">
+                {errors.username.message}
+              </p>
             )}
           </div>
 
           <InputDemo setMonkeyState={setMonkeyState} register={register} />
           {errors.password && (
-            <p className="text-red-500 text-sm !mt-2">{errors.password.message}</p>
+            <p className="text-red-500 text-sm !mt-2">
+              {errors.password.message}
+            </p>
           )}
 
           <DialogFooter className="flex justify-end gap-2">
             {text === "Edit details" && (
-              <Button
-                variant="outline"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleDelete(item.$id);
-                }}
-              >
-                <Trash2 className="h-5 w-5" />
-              </Button>
+              <AlertDialog open={openDelete} onOpenChange={setOpenDelete}>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline">
+                    <Trash2 className="h-5 w-5" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you sure you want to delete?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      the item. 🥹
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button
+                      variant="destructive"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDelete(item.$id);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             )}
             <Button
               className={`w-20 flex items-center ${loading && "text-gray-400"}`}
