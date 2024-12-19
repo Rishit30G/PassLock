@@ -59,7 +59,7 @@ export default {
       animation: {
         shimmer: "shimmer 2s linear infinite",
         "caret-blink": "caret-blink 1s step-end infinite",
-        shake: "shake 3s ease-in-out infinite",
+        "shake": "shake 3s ease-in-out infinite",
       },
       keyframes: {
         shimmer: {
