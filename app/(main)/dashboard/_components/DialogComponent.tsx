@@ -22,7 +22,6 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import InputDemo from "./PasswordInput";
-import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addPasswordsSchema } from "@/lib/zodSchema/schemas";
@@ -34,6 +33,7 @@ import {
   updateDetails,
 } from "@/actions/password.action";
 import { toast } from "sonner";
+import InputBox from "@/components/InputBox";
 
 interface DialogComponentProps {
   children: React.ReactNode;
@@ -76,7 +76,7 @@ const DialogComponent = ({
     defaultValues: {
       orgName: item?.orgName || "",
       orgUrl: item?.orgUrl || "",
-      username: item?.username || "",
+      username: item?.userName || "",
       password: item?.password || "",
     },
   });
@@ -85,7 +85,7 @@ const DialogComponent = ({
     reset({
       orgName: item?.orgName || "",
       orgUrl: item?.orgUrl || "",
-      username: item?.username || "",
+      username: item?.userName || "",
       password: item?.password || "",
     });
   }, [item, isOpen, reset]);
@@ -104,8 +104,7 @@ const DialogComponent = ({
       onOpenChange(false);
       onSuccessfulOperation && onSuccessfulOperation();
     } catch (error) {
-      console.log(error?.message || "Operation failed");
-      toast.error("Something went wrong");
+      toast.error("Details failed to save");
     } finally {
       setLoading(false);
     }
@@ -144,7 +143,8 @@ const DialogComponent = ({
               <Image
                 src="/see_no_evil.png"
                 alt="Hidden"
-                className="object-contain py-3 transition-transform scale-90"
+                className="object-contain py-3 transition-transform scale-90 ease-in-out"
+
                 width={80}
                 height={80}
               />
@@ -152,7 +152,7 @@ const DialogComponent = ({
               <Image
                 src="/monkey_face.png"
                 alt="Visible"
-                className="object-contain py-3 cursor-pointer"
+                className="object-contain py-3 cursor-pointer hover:animate-shake"
                 width={80}
                 height={80}
               />
@@ -161,91 +161,29 @@ const DialogComponent = ({
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="relative w-full">
-            <Input
-              placeholder="Organization Name"
-              {...register("orgName")}
-              autoComplete="off"
-              className="pr-12" // Add padding to avoid overlap with the icon
-            />
-            <Copy
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 
-              ${
-                watch("orgName")
-                  ? "text-gray-400 hover:text-gray-500 cursor-pointer"
-                  : "text-gray-300 cursor-not-allowed"
-              }`}
-              onClick={() => {
-                if (watch("orgName")) {
-                  handleCopy(watch("orgName"));
-                }
-              }}
-              size={18}
-            />
+          
+          <InputBox register={{...register("orgName")}} placeholder="Organization Name" value={watch("orgName")} />
             {errors.orgName && (
               <p className="text-red-500 text-sm mt-2">
                 {errors.orgName.message}
               </p>
             )}
-          </div>
 
-          <div className="relative w-full ">
-            <Input
-              placeholder="Organization URL"
-              {...register("orgUrl")}
-              autoComplete="off"
-              className="pr-12"
-            />
-            <Copy
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 
-                ${
-                  watch("orgUrl")
-                    ? "text-gray-400 hover:text-gray-500 cursor-pointer"
-                    : "text-gray-300 cursor-not-allowed"
-                }`}
-              onClick={() => {
-                if (watch("orgUrl")) {
-                  handleCopy(watch("orgUrl"));
-                }
-              }}
-              size={18}
-            />
+          <InputBox register={{...register("orgUrl")}} placeholder="Organization URL" value={watch("orgUrl")} />
             {errors.orgUrl && (
               <p className="text-red-500 text-sm mt-2">
                 {errors.orgUrl.message}
               </p>
             )}
-          </div>
 
-          <div className="relative w-full">
-            <Input
-              placeholder="Username"
-              {...register("username")}
-              autoComplete="off"
-              className="pr-12" // Add padding to avoid overlap with the icon
-            />
-            <Copy
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 
-                ${
-                  watch("username")
-                    ? "text-gray-400 hover:text-gray-500 cursor-pointer"
-                    : "text-gray-300 cursor-not-allowed"
-                }`}
-              onClick={() => {
-                if (watch("username")) {
-                  handleCopy(watch("username"));
-                }
-              }}
-              size={18}
-            />
+          <InputBox register={{...register("username")}} placeholder="Username" value={watch("username")} />
             {errors.username && (
               <p className="text-red-500 text-sm mt-2">
                 {errors.username.message}
               </p>
             )}
-          </div>
 
-          <InputDemo setMonkeyState={setMonkeyState} register={register} />
+          <InputDemo setMonkeyState={setMonkeyState} register={{...register("password")}} placeholder="Password" />
           {errors.password && (
             <p className="text-red-500 text-sm !mt-2">
               {errors.password.message}

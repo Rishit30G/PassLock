@@ -21,13 +21,17 @@ import {
 import { useRouter } from "next/navigation";
 import { verifySecret } from "@/actions/users.action";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const OTPForm = ({ accountId }) => {
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const sessionId = await verifySecret({ accountId, password });
@@ -37,6 +41,8 @@ const OTPForm = ({ accountId }) => {
       }
     } catch (error) {
       toast.error("Incorrect OTP, please check again!");
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -71,9 +77,10 @@ const OTPForm = ({ accountId }) => {
                 {" "}
                 Resend OTP{" "}
               </p>
-              <AlertDialogAction type="submit" onClick={handleSubmit}>
+              <Button type="submit" onClick={handleSubmit} className="w-30 flex items-center" disabled={loading}>
                 Submit
-              </AlertDialogAction>
+                <Loader2 className="w-4 h-4 animate-spin" />
+              </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogTrigger>

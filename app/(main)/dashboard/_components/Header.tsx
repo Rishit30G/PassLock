@@ -2,6 +2,7 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { LogOutIcon } from "lucide-react";
 import { signOutUser } from "@/actions/users.action";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const Header = () => {
 
@@ -9,7 +10,7 @@ const Header = () => {
     try {
       await signOutUser();
     } catch (error: any) {
-      console.log(error?.message);
+      toast.error(error.message || "Failed to sign out");
     }
   };
 

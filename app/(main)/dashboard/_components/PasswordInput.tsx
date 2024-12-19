@@ -3,26 +3,32 @@
 import { Input } from "@/components/ui/input";
 import { EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 
-export default function InputDemo({ setMonkeyState, register}: { setMonkeyState: (state: boolean) => void, register: ReturnType<typeof useForm>['register']; } ) {
+type InputDemoProps = {
+  register: React.InputHTMLAttributes<HTMLInputElement>; // This will accept spread props from `register`
+  setMonkeyState?: (state: boolean) => void;
+  placeholder: string;
+};
+
+export default function InputDemo({ register, setMonkeyState, placeholder }: InputDemoProps) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => {
     const newState = !isVisible;
     setIsVisible(newState);
-    setMonkeyState(!newState); 
+    setMonkeyState?.(!newState);
   };
-  const handleFocus = () => setMonkeyState(true); 
-  const handleBlur = () => setMonkeyState(false); 
+
+  const handleFocus = () => setMonkeyState?.(true);
+  const handleBlur = () => setMonkeyState?.(false);
 
   return (
     <div className="space-y-4">
       <span className="relative">
         <Input
-          {...register('password')}
+          {...register} // Spread the props from `register`
           className="pe-9"
-          placeholder="Password"
+          placeholder={placeholder}
           type={isVisible ? "text" : "password"}
           onFocus={handleFocus}
           onBlur={handleBlur}
