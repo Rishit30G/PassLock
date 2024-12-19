@@ -4,10 +4,10 @@ import React from "react";
 const CardSkeleton = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-10 gap-10">
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+      {[1, 2, 3].map((item, index) => (
         <Skeleton
           className="min-h-[180px] w-full rounded-lg shadow-2xl shadow-blue-500/20 dark:shadow-blue-500/10 relative"
-          key={item}
+          key={index}
         >
           <Skeleton className="flex flex-col justify-end h-full p-5">
             <div className="flex items-center justify-between gap-5 w-full">
