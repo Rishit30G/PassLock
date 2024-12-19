@@ -9,8 +9,7 @@ export async function middleware(request: any) {
   if (protectedRoutes.includes(pathname)) {
     const authToken = (await cookies()).get("appwrite-session");
 
-    // If the user is not authenticated, protect the /dashboard route
-    if (!authToken && pathname === "/dashboard") {
+    if (!authToken) {
       const signInUrl = new URL("/sign-in", request.url);
       return NextResponse.redirect(signInUrl);
     }
