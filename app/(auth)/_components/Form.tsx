@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import OTPForm from "./OTPForm";
 import { Eye, EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
+import InputDemo from "@/app/(main)/dashboard/_components/PasswordInput";
 
 interface FormProps {
   formType: string;
@@ -114,42 +115,18 @@ const AuthForm = ({ formType }: FormProps) => {
       {errors.email && (
         <p className="text-red-500 text-sm">{errors.email.message}</p>
       )}
-      <div className="relative">
-          <Input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            {...register("password")}
-          />
-          <div
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 dark:text-gray-500"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <Eye size={12} /> : <EyeOff size={12} />}
-          </div>
+        <InputDemo register={{ ...register("password") }} placeholder="Password" />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
-        </div>
       {formType === "sign-up" && (
         <>
-          <div className="relative">
-            <Input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
-              {...register("confirmPassword")}
-            />
-            <div
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400 dark:text-gray-500"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? <Eye size={12} /> : <EyeOff size={12} />}
-            </div>
+            <InputDemo register={{ ...register("confirmPassword") }} placeholder="Confirm Password" />
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm">
                 {errors.confirmPassword.message}
               </p>
             )}
-          </div>
         </>
       )}
       <Button className={`w-full flex items-center ${loading && 'text-gray-400'}`} disabled={loading}>
