@@ -13,7 +13,6 @@ import Header from "./_components/Header";
 import { getCurrentUser } from "@/actions/users.action";
 import { generateCircles } from "@/lib/utils";
 import FlipWordSkeleton from "./_components/FlipWordSkeleton";
-import { getDetails } from "@/actions/password.action";
 import { toast } from "sonner";
 
 const Dashboard = () => {
@@ -33,7 +32,7 @@ const Dashboard = () => {
         const result = await getCurrentUser();
         setUser(result);
       } catch (error: any) {
-        console.log(error?.message);
+        toast.error(error.message);
       }
     }
     handleAddDetails();
