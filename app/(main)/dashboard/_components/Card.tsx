@@ -34,21 +34,16 @@ const DashboardCards = ({
   }, [searchTerm, userCards]);
 
   const fetchDetails = useCallback(async () => {
-    setLoading(true);
     try {
       const details = await getDetails({ length: 0 });
       setUserCards(details.result);
       setHasMore(details.result.length > 0);
     } catch (error: any) {
-      console.log(error?.message);
       toast.error("Failed to fetch details");
-    } finally {
-      setLoading(false);
-    }
+    } 
   }, []);
 
   const fetchMoreData = async () => {
-    setLoading(true);
     try {
       const details = await getDetails({ length: userCards.length });
       setUserCards((prev) => [...prev, ...details.result]);
@@ -56,10 +51,7 @@ const DashboardCards = ({
         setHasMore(false);
       }
     } catch (error: any) {
-      console.log(error?.message);
       toast.error("Failed to fetch more data");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -78,16 +70,6 @@ const DashboardCards = ({
 
   return (
     <>
-      {filteredItems.length === 0 && !loading && (
-        <div className="flex justify-center py-10">
-          <p className="text-xl poppins-light text-gray-500">
-            Enter the details by clicking on 'Add New'
-          </p>
-        </div>
-      )}
-
-      {loading && <CardSkeleton />}
-
       <InfiniteScroll
         dataLength={filteredItems.length}
         next={fetchMoreData}
