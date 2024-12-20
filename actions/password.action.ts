@@ -5,11 +5,20 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import { decrypt, encrypt, parseStringify } from "@/lib/utils";
 import { ID, Query } from "node-appwrite";
 import { getCurrentUser } from "./users.action";
+import { revalidatePath } from "next/cache";
+
+interface UserData {
+  orgName: string;
+  orgUrl?: string;
+  username?: string;
+  password: string;
+}
 
 export async function createDetails(
-  data: any,
+  data: UserData,
   userId: string,
-  accountId: string
+  accountId: string,
+  path: string
 ) {
   try {
     const { databases } = await createAdminClient();
@@ -27,13 +36,52 @@ export async function createDetails(
         userName: data?.username || null,
       }
     );
+    revalidatePath(path);
     return parseStringify({ message: "Details created successfully" });
-  } catch (error: any) {
-    throw new Error(error?.message || "Something went wrong");
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Something went wrong");
   }
 }
 
-export async function getDetails(length: { length: number }) {
+export async function getSearchDetails(searchTerm: string) {
+  try {
+    const { databases } = await createAdminClient();
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+    const orgNameResults = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.passwordsCollectionId,
+      [Query.contains("orgName", lowerCaseSearchTerm)]
+    );
+
+    const userNameResults = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.passwordsCollectionId,
+      [Query.contains("userName", lowerCaseSearchTerm)]
+    );
+
+    // Combine results manually
+    const combinedResults = [
+      ...orgNameResults.documents,
+      ...userNameResults.documents,
+    ];
+
+    const result = combinedResults.map((doc) => ({
+      ...doc,
+      password: decrypt(doc.password),
+    }));
+
+    if (combinedResults.length > 0) {
+      return parseStringify({ result });
+    } else {
+      return { message: "No matching results found" };
+    }
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Failed to perform search");
+  }
+}
+
+export async function getDetails(length: { length: number }, path: string) {
   const { databases } = await createAdminClient();
   try {
     const currentUser = await getCurrentUser();
@@ -47,24 +95,29 @@ export async function getDetails(length: { length: number }) {
       appwriteConfig.passwordsCollectionId,
       [
         Query.equal("owner", currentUser.$id),
-        Query.orderDesc("$createdAt"), // Assuming you want to order by creation date
-        Query.limit(9), // Assuming you want to limit the number of documents fetched
+        Query.orderDesc("$createdAt"),
+        Query.limit(9),
         Query.offset(length.length),
       ]
     );
 
-    const result = details.documents.map((doc: any) => ({
+    const result = details.documents.map((doc) => ({
       ...doc,
       password: decrypt(doc.password),
     }));
 
+    revalidatePath(path);
     return parseStringify({ result });
-  } catch (error: any) {
-    throw new Error(error?.message || "Details not fetched");
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Details not fetched");
   }
 }
 
-export async function updateDetails(documentId: string, data: any) {
+export async function updateDetails(
+  documentId: string,
+  data: UserData,
+  path: string
+) {
   const { databases } = await createAdminClient();
   try {
     await databases.updateDocument(
@@ -78,13 +131,14 @@ export async function updateDetails(documentId: string, data: any) {
         password: encrypt(data.password),
       }
     );
+    revalidatePath(path);
     return parseStringify({ message: "Details updated successfully" });
-  } catch (error: any) {
-    throw new Error(error?.message || "Details not updated");
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Details not updated");
   }
 }
 
-export async function deleteDetails(documentId: any) {
+export async function deleteDetails(documentId: string, path: string) {
   const { databases } = await createAdminClient();
   try {
     await databases.deleteDocument(
@@ -92,8 +146,9 @@ export async function deleteDetails(documentId: any) {
       appwriteConfig.passwordsCollectionId,
       documentId
     );
+    revalidatePath(path);
     return parseStringify({ message: "Details deleted successfully" });
-  } catch (error: any) {
-    throw new Error(error?.message || "Details not deleted");
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Details not deleted");
   }
 }
