@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import crypto from "crypto";
+import { toast } from "sonner";
 
 const ENCRYPTION_KEY = Buffer.from('01234567890123456789012345678901', "utf8");
 const IV_LENGTH = 16; // Initialization vector length for AES
@@ -41,3 +42,24 @@ export const maskPassword = (password: string) => {
 export const generateCircles = (length: number) => {
   return '●'.repeat(length);
 };
+
+export const handleCopy = (text: string) => {
+  try {
+    navigator.clipboard.writeText(text);
+    toast.success("Password copied!");
+  } catch (error) {
+    toast.error("Failed to copy password");
+  }
+};
+
+export const sortByOrgName = (array: {orgName: string}[]) => {
+  return array.sort((a, b) => {
+    if (a.orgName < b.orgName) {
+      return -1;
+    }
+    if (a.orgName > b.orgName) {
+      return 1;
+    }
+    return 0;
+  })
+}
