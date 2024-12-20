@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -10,7 +10,6 @@ import {
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -19,16 +18,42 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { verifySecret } from "@/actions/users.action";
+import { sendEmailOTP, verifySecret } from "@/actions/users.action";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-const OTPForm = ({ accountId }) => {
+const OTPForm = ({ accountId, email }: { accountId: string; email: string }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [timer, setTimer] = useState(120); 
 
   const router = useRouter();
+
+  // Countdown Timer Effect
+  useEffect(() => {
+    let countdown: NodeJS.Timeout;
+    if (isResendDisabled && timer > 0) {
+      countdown = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    if (timer === 0) {
+      setIsResendDisabled(false);
+    }
+
+    return () => clearInterval(countdown); // Clean up on unmount
+  }, [timer, isResendDisabled]);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
@@ -41,12 +66,23 @@ const OTPForm = ({ accountId }) => {
       }
     } catch (error) {
       toast.error("Incorrect OTP, please check again!");
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleResentOTP = async (e: React.MouseEvent<HTMLButtonElement>) => {};
+  const handleResendOTP = async () => {
+    if (!isResendDisabled) {
+      try {
+        await sendEmailOTP(email);
+        toast.success("OTP resent successfully");
+        setIsResendDisabled(true);
+        setTimer(120);
+      } catch (error) {
+        toast.error("Failed to resend OTP. Please try again.");
+      }
+    }
+  };
 
   return (
     <>
@@ -73,13 +109,26 @@ const OTPForm = ({ accountId }) => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="!flex !flex-col justify-center items-center gap-4">
-              <p className="text-xs text-center text-gray-400 cursor-pointer">
-                {" "}
-                Resend OTP{" "}
+              <p
+                className={`text-xs text-center ${
+                  isResendDisabled
+                    ? "text-gray-400 cursor-not-allowed"
+                    : "text-gray-700 cursor-pointer"
+                }`}
+                onClick={handleResendOTP}
+              >
+                {isResendDisabled
+                  ? `Resend OTP in ${formatTime(timer)}`
+                  : "Resend OTP"}
               </p>
-              <Button type="submit" onClick={handleSubmit} className="w-30 flex items-center" disabled={loading}>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                className="w-30 flex items-center"
+                disabled={loading}
+              >
                 Submit
-                <Loader2 className="w-4 h-4 animate-spin" />
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

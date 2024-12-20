@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ID, Query } from "node-appwrite";
 import bcrypt from "bcryptjs";
+import { updateDetails } from "./password.action";
 
 export const sendEmailOTP = async (email: string) => {
   const { account } = await createAdminClient();
@@ -62,7 +63,11 @@ export const createAccount = async (
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const { databases, account } = await createAdminClient();
-    const newUser = await account.create(ID.unique(), data.email, data.password);
+    const newUser = await account.create(
+      ID.unique(),
+      data.email,
+      data.password
+    );
 
     await databases.createDocument(
       appwriteConfig.databaseId,
@@ -91,7 +96,10 @@ export const getAccount = async (data: { email: string; password: string }) => {
       throw new Error("User does not exist");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     if (!isPasswordValid) {
       throw new Error("Invalid email or password");
     }
@@ -124,14 +132,66 @@ export const getCurrentUser = async () => {
 };
 
 export const signOutUser = async () => {
-  const { account } = await createSessionClient(); 
-  try{
-    await account.deleteSession('current'); 
-    (await cookies()).delete("appwrite-session"); 
-  }
-  catch(error){
+  const { account } = await createSessionClient();
+  try {
+    await account.deleteSession("current");
+    (await cookies()).delete("appwrite-session");
+  } catch (error) {
     throw new Error("Failed to sign out");
-  }finally{
-    redirect('/sign-in');
+  } finally {
+    redirect("/sign-in");
   }
-}
+};
+
+export const recoveryPassword = async (email: string) => {
+  const { account } = await createAdminClient();
+  try {
+    await account.createRecovery(email, "http://localhost:3000/reset-password");
+  } catch (error) {
+    throw new Error("Sorry, we don't have an account with that email address");
+  }
+};
+
+export const getDocumentIdfromUserId = async (userId: string) => {
+  const { databases } = await createAdminClient();
+  try {
+    const result = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      [Query.equal("accountId", userId)]
+    );
+    if (result.total <= 0) return null;
+    return result.documents[0].$id;
+  } catch (error) {
+    throw new Error(error.message || "Failed to get document id");
+  }
+};
+
+export const updateUserPassword = async (userId: string, password: string) => {
+  const { databases } = await createAdminClient();
+  const documentId = await getDocumentIdfromUserId(userId);
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      documentId,
+      { password: hashedPassword }
+    );
+  } catch (error) {
+    throw new Error(error.message || "Failed to update password");
+  }
+};
+
+export const resetPassword = async (
+  userId: string,
+  secret: string,
+  password: string
+) => {
+  const { account } = await createAdminClient();
+  try {
+    await account.updateRecovery(userId, secret, password);
+  } catch (error) {
+    throw new Error(error.message || "Failed to reset password");
+  }
+};

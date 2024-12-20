@@ -49,3 +49,16 @@ export const addPasswordsSchema = z.object({
   username: z.string().optional(),
   password: z.string().nonempty({ message: "Password is required" }),
 });
+
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+export const resetPasswordSchema = z.object({
+  password: passwordSchema,
+  confirmPassword: z.string().nonempty("Confirm password is required"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
