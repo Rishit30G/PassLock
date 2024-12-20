@@ -3,10 +3,8 @@ import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { ID, Query } from "node-appwrite";
 import bcrypt from "bcryptjs";
-import { updateDetails } from "./password.action";
 
 export const sendEmailOTP = async (email: string) => {
   const { account } = await createAdminClient();
@@ -29,7 +27,7 @@ export const verifySecret = async ({
     const { account } = await createAdminClient();
     const session = await account.createSession(accountId, password);
     (await cookies()).set("appwrite-session", session.secret, {
-      path: "/dashboard",
+      path: "/",
       httpOnly: true,
       sameSite: "strict",
       secure: true,
@@ -51,8 +49,8 @@ const getUserByEmail = async (email: string) => {
 };
 
 export const createAccount = async (
-  data: any
-): Promise<{ message: string }> => {
+  data: { email: string; password: string; firstName: string; lastName: string }
+) => {
   try {
     const userEmail = data.email;
 
@@ -82,8 +80,8 @@ export const createAccount = async (
       }
     );
     return parseStringify({ message: "Account created successfully" });
-  } catch (error: any) {
-    throw new Error(error?.message || "Something went wrong");
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Something went wrong");
   }
 };
 
@@ -110,8 +108,8 @@ export const getAccount = async (data: { email: string; password: string }) => {
     }
 
     return { message: "OTP sent successfully", accountId: accountId };
-  } catch (error: any) {
-    throw new Error(error?.message || "Something went wrong");
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Something went wrong");
   }
 };
 
@@ -127,7 +125,7 @@ export const getCurrentUser = async () => {
     if (user.total <= 0) return null;
     return parseStringify(user.documents[0]);
   } catch (error) {
-    throw new Error(error?.message || "Something went wrong");
+    throw new Error((error as Error)?.message || "Something went wrong");
   }
 };
 
@@ -138,9 +136,7 @@ export const signOutUser = async () => {
     (await cookies()).delete("appwrite-session");
   } catch (error) {
     throw new Error("Failed to sign out");
-  } finally {
-    redirect("/sign-in");
-  }
+  } 
 };
 
 export const recoveryPassword = async (email: string) => {
@@ -163,13 +159,13 @@ export const getDocumentIdfromUserId = async (userId: string) => {
     if (result.total <= 0) return null;
     return result.documents[0].$id;
   } catch (error) {
-    throw new Error(error.message || "Failed to get document id");
+    throw new Error((error as Error)?.message || "Failed to get document id");
   }
 };
 
 export const updateUserPassword = async (userId: string, password: string) => {
   const { databases } = await createAdminClient();
-  const documentId = await getDocumentIdfromUserId(userId);
+  const documentId = await getDocumentIdfromUserId(userId) as string;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await databases.updateDocument(
@@ -179,7 +175,7 @@ export const updateUserPassword = async (userId: string, password: string) => {
       { password: hashedPassword }
     );
   } catch (error) {
-    throw new Error(error.message || "Failed to update password");
+    throw new Error((error as Error)?.message || "Failed to update password");
   }
 };
 
@@ -192,6 +188,6 @@ export const resetPassword = async (
   try {
     await account.updateRecovery(userId, secret, password);
   } catch (error) {
-    throw new Error(error.message || "Failed to reset password");
+    throw new Error((error as Error)?.message || "Failed to reset password");
   }
 };
