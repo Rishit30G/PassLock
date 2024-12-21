@@ -5,7 +5,6 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import { decrypt, encrypt, parseStringify } from "@/lib/utils";
 import { ID, Query } from "node-appwrite";
 import { getCurrentUser } from "./users.action";
-import { revalidatePath } from "next/cache";
 
 interface UserData {
   orgName: string;
@@ -17,8 +16,7 @@ interface UserData {
 export async function createDetails(
   data: UserData,
   userId: string,
-  accountId: string,
-  path: string
+  accountId: string
 ) {
   try {
     const { databases } = await createAdminClient();
@@ -36,7 +34,6 @@ export async function createDetails(
         userName: data?.username || null,
       }
     );
-    revalidatePath(path);
     return parseStringify({ message: "Details created successfully" });
   } catch (error) {
     throw new Error((error as Error)?.message || "Something went wrong");
@@ -81,7 +78,7 @@ export async function getSearchDetails(searchTerm: string) {
   }
 }
 
-export async function getDetails(length: { length: number }, path: string) {
+export async function getDetails(length: { length: number }) {
   const { databases } = await createAdminClient();
   try {
     const currentUser = await getCurrentUser();
@@ -106,7 +103,6 @@ export async function getDetails(length: { length: number }, path: string) {
       password: decrypt(doc.password),
     }));
 
-    revalidatePath(path);
     return parseStringify({ result });
   } catch (error) {
     throw new Error((error as Error)?.message || "Details not fetched");
@@ -116,7 +112,6 @@ export async function getDetails(length: { length: number }, path: string) {
 export async function updateDetails(
   documentId: string,
   data: UserData,
-  path: string
 ) {
   const { databases } = await createAdminClient();
   try {
@@ -131,14 +126,13 @@ export async function updateDetails(
         password: encrypt(data.password),
       }
     );
-    revalidatePath(path);
     return parseStringify({ message: "Details updated successfully" });
   } catch (error) {
     throw new Error((error as Error)?.message || "Details not updated");
   }
 }
 
-export async function deleteDetails(documentId: string, path: string) {
+export async function deleteDetails(documentId: string) {
   const { databases } = await createAdminClient();
   try {
     await databases.deleteDocument(
@@ -146,7 +140,6 @@ export async function deleteDetails(documentId: string, path: string) {
       appwriteConfig.passwordsCollectionId,
       documentId
     );
-    revalidatePath(path);
     return parseStringify({ message: "Details deleted successfully" });
   } catch (error) {
     throw new Error((error as Error)?.message || "Details not deleted");
