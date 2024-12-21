@@ -11,12 +11,11 @@ import { z } from "zod";
 import { toast } from "sonner";
 import {
   createAccount,
-  getAccount,
-  getCurrentUser,
+  getAccount, 
 } from "@/actions/users.action";
 import { useRouter } from "next/navigation";
 import OTPForm from "./OTPForm";
-import { Eye, EyeIcon, EyeOff, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import InputDemo from "@/app/(main)/dashboard/_components/PasswordInput";
 
@@ -57,7 +56,7 @@ const AuthForm = ({ formType }: FormProps) => {
         toast.success(result.message);
         router.push("/sign-in");
       } catch (error) {
-        toast.error(error.message);
+        toast.error((error as Error)?.message || "Failed to create account");
       } finally {
         setLoading(false);
       }
@@ -68,7 +67,7 @@ const AuthForm = ({ formType }: FormProps) => {
         setShowModal(true);
         setAccountId(accountId);
       } catch (error) {
-        toast.error(error.message);
+        toast.error((error as Error)?.message || "Failed to sign in");
       } finally {
         setLoading(false);
       }
@@ -90,7 +89,7 @@ const AuthForm = ({ formType }: FormProps) => {
                 {...register("firstName")}
                 autoComplete="off"
               />
-              {errors.firstName && (
+                {errors.firstName && (
                 <p className="text-red-500 text-sm">
                   {errors.firstName.message}
                 </p>

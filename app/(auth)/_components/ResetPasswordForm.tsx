@@ -1,7 +1,7 @@
 "use client";
 
 import InputDemo from "@/app/(main)/dashboard/_components/PasswordInput";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -9,7 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema } from "@/lib/zodSchema/schemas";
 import { resetPassword, updateUserPassword } from "@/actions/users.action";
-import {useRouter} from "next/navigation";
+import { usePathname, useRouter} from "next/navigation";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
@@ -34,15 +34,15 @@ const ResetPasswordForm = () => {
   async function onSubmit(values: z.infer<typeof schema>) {
     setLoading(true);
     const password = values.password; 
-    const userId = searchParams.get("userId");
-    const secret = searchParams.get("secret");
+    const userId = searchParams.get("userId") as string;
+    const secret = searchParams.get("secret") as string;
     try{
       await resetPassword(userId, secret, password);
       await updateUserPassword(userId, password);
       toast.success("Password reset successfully");
       router.push("/sign-in");
     }catch(error){
-      toast.error(error.message);
+      toast.error((error as Error)?.message || "Password not reset, try again!");
     }finally{
       setLoading(false);
     }

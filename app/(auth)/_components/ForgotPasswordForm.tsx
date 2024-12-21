@@ -37,7 +37,7 @@ const ForgotPasswordForm = () => {
           toast.success('Email sent successfully');
           router.push('/reset-password');
         }catch(error){
-          toast.error(error.message);
+          toast.error((error as Error)?.message || 'Email not sent, try again!');
         }
         finally{
           setLoading(false);

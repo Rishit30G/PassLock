@@ -23,11 +23,17 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-const OTPForm = ({ accountId, email }: { accountId: string; email: string }) => {
+const OTPForm = ({
+  accountId,
+  email,
+}: {
+  accountId: string;
+  email: string;
+}) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
-  const [timer, setTimer] = useState(120); 
+  const [timer, setTimer] = useState(120);
 
   const router = useRouter();
 
@@ -93,7 +99,8 @@ const OTPForm = ({ accountId, email }: { accountId: string; email: string }) => 
               <AlertDialogTitle>OTP is shipped 🛳️</AlertDialogTitle>
               <AlertDialogDescription className="space-y-4 text-center">
                 Please enter the OTP sent to your registered email
-                <InputOTP maxLength={6} value={password} onChange={setPassword}>
+              </AlertDialogDescription>
+              <InputOTP maxLength={6} value={password} onChange={setPassword} autoFocus>
                   <InputOTPGroup>
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
@@ -106,10 +113,9 @@ const OTPForm = ({ accountId, email }: { accountId: string; email: string }) => 
                     <InputOTPSlot index={5} />
                   </InputOTPGroup>
                 </InputOTP>
-              </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="!flex !flex-col justify-center items-center gap-4">
-              <p
+              <div
                 className={`text-xs text-center ${
                   isResendDisabled
                     ? "text-gray-400 cursor-not-allowed"
@@ -120,7 +126,7 @@ const OTPForm = ({ accountId, email }: { accountId: string; email: string }) => 
                 {isResendDisabled
                   ? `Resend OTP in ${formatTime(timer)}`
                   : "Resend OTP"}
-              </p>
+              </div>
               <Button
                 type="submit"
                 onClick={handleSubmit}

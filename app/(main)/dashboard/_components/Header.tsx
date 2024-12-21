@@ -3,15 +3,18 @@ import { LogOutIcon } from "lucide-react";
 import { signOutUser } from "@/actions/users.action";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
 
+  const router = useRouter();
   const handleSubmit = async () => {
     try {
       await signOutUser();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign out");
-    }
+      router.push("/sign-in");
+    } catch (error) {
+      toast.error("Failed to sign out");
+    } 
   };
 
   return (

@@ -5,7 +5,7 @@ import { EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 type InputDemoProps = {
-  register: React.InputHTMLAttributes<HTMLInputElement>; // This will accept spread props from `register`
+  register: React.InputHTMLAttributes<HTMLInputElement>; 
   setMonkeyState?: (state: boolean) => void;
   placeholder: string;
 };
@@ -26,7 +26,7 @@ export default function InputDemo({ register, setMonkeyState, placeholder }: Inp
     <div className="space-y-4">
       <span className="relative">
         <Input
-          {...register} // Spread the props from `register`
+          {...register} 
           className="pe-9"
           placeholder={placeholder}
           type={isVisible ? "text" : "password"}

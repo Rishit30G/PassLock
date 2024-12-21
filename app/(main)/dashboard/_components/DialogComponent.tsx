@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -26,7 +28,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addPasswordsSchema } from "@/lib/zodSchema/schemas";
 import { useForm } from "react-hook-form";
-import { Copy, Loader2, Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import {
   createDetails,
   deleteDetails,
@@ -35,12 +37,19 @@ import {
 import { toast } from "sonner";
 import InputBox from "@/components/InputBox";
 
+interface UserProps {
+  $id: string;
+  orgName: string;
+  orgUrl: string;
+  userName: string;
+  password: string;
+}
 interface DialogComponentProps {
   children: React.ReactNode;
   text: string;
   userId: string;
   accountId: string;
-  item?: any;
+  item?: UserProps;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccessfulOperation?: () => void;
@@ -117,20 +126,11 @@ const DialogComponent = ({
       onOpenChange(false);
       onSuccessfulOperation && onSuccessfulOperation();
     } catch (error) {
-      toast.error(error?.message || "Failed to delete");
+      toast.error((error as Error)?.message || "Failed to delete");
     } finally {
       setLoading(false);
     }
   }
-
-  const handleCopy = (text: string) => {
-    try {
-      navigator.clipboard.writeText(text);
-      toast.success("Copied!");
-    } catch (error) {
-      toast.error("Failed to copy");
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -169,14 +169,14 @@ const DialogComponent = ({
               </p>
             )}
 
-          <InputBox register={{...register("orgUrl")}} placeholder="Organization URL" value={watch("orgUrl")} />
+          <InputBox register={{...register("orgUrl")}} placeholder="Organization URL" value={watch("orgUrl") || ''} />
             {errors.orgUrl && (
               <p className="text-red-500 text-sm mt-2">
                 {errors.orgUrl.message}
               </p>
             )}
 
-          <InputBox register={{...register("username")}} placeholder="Username" value={watch("username")} />
+          <InputBox register={{...register("username")}} placeholder="Username" value={watch("username") || ''} />
             {errors.username && (
               <p className="text-red-500 text-sm mt-2">
                 {errors.username.message}
@@ -214,7 +214,7 @@ const DialogComponent = ({
                       variant="destructive"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleDelete(item.$id);
+                        handleDelete(item?.$id || "");
                       }}
                     >
                       Delete
