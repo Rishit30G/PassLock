@@ -2,10 +2,9 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, searchParams } = request.nextUrl;
   const authToken = (await cookies()).get("appwrite-session");
 
-  // Handle protected routes
   if (pathname.startsWith("/dashboard")) {
     if (!authToken) {
       const signInUrl = new URL("/sign-in", request.url);
@@ -13,15 +12,25 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Prevent signed-in users from accessing /sign-in and /sign-up
   if (authToken && (pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up"))) {
     const dashboardUrl = new URL("/dashboard", request.url);
     return NextResponse.redirect(dashboardUrl);
+  }
+
+  if (pathname.startsWith("/reset-password")) {
+    const userId = searchParams.get("userId");
+    const secret = searchParams.get("secret");
+    const referrer = request.headers.get("referer") || "";
+
+    if ((!userId || !secret) && !referrer.includes("/forgot-password")) {
+      const signInUrl = new URL("/sign-in", request.url);
+      return NextResponse.redirect(signInUrl);
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard", "/sign-in", "/sign-up"], // Match these routes
+  matcher: ["/dashboard", "/sign-in", "/sign-up", "/reset-password"], 
 };
