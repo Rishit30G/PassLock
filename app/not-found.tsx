@@ -3,6 +3,12 @@ import { ConfettiButton } from '@/components/ui/confetti'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "PassLock - Not Found",
+  description: "Page not found",
+}
 
 const page = () => {
   return (
