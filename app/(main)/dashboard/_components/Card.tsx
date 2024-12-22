@@ -1,7 +1,7 @@
 "use client";
 
 import { CardContent, Card } from "@/components/ui/card";
-import { ArrowRight, Copy, Search } from "lucide-react";
+import { ArrowRight, Copy, Search, X } from "lucide-react";
 import DialogComponent from "./DialogComponent";
 import { useEffect, useState, useCallback } from "react";
 import { getDetails, getSearchDetails } from "@/actions/password.action";
@@ -31,7 +31,6 @@ const DashboardCards = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
-  const path = usePathname();
 
   const fetchDetails = useCallback(async () => {
     setLoading(true);
@@ -41,7 +40,7 @@ const DashboardCards = ({
       setHasMore(details.result.length > 0);
     } catch (error) {
       toast.error((error as Error)?.message || "Failed to fetch data");
-    } finally{
+    } finally {
       setLoading(false);
     }
   }, []);
@@ -63,10 +62,13 @@ const DashboardCards = ({
   }, [fetchDetails]);
 
   const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      return;
+    }
     setSearching(true);
     setLoading(true);
     try {
-      const details = await getSearchDetails(searchTerm);
+      const details = await getSearchDetails(searchTerm.trim());
       const sortedResults = sortByOrgName(details.result || []);
       setUserCards(sortedResults);
       setHasMore(false);
@@ -74,8 +76,13 @@ const DashboardCards = ({
       toast.error((error as Error)?.message || "Failed to search data");
     } finally {
       setLoading(false);
-      setSearching(false);
     }
+  };
+
+  const handleClearSearch = async () => {
+    setSearchTerm("");
+    setSearching(false);
+    await fetchDetails();
   };
 
   return (
@@ -85,14 +92,25 @@ const DashboardCards = ({
           <h2 className="text-xl poppins-light max-md:hidden">Password List</h2>
           <div className="flex items-center gap-5">
             <div className="relative w-[280px] max-lg:max-w-[230px]">
-              <Button variant="outline"  onClick={handleSearch} className="absolute right-0 top-0  cursor-pointer border dark:bg-gray-500/20 bg-white dark:hover:bg-gray-500/40 hover:bg-gray-100/30">
-                <Search className="dark:text-white text-gray-500"/>
+              <Button
+                variant="outline"
+                onClick={searching ? handleClearSearch : handleSearch}
+                className="absolute right-0 top-0  cursor-pointer border dark:bg-gray-500/20 bg-white dark:hover:bg-gray-500/40 hover:bg-gray-100/30"
+              >
+                {searching ? (
+                  <X className="dark:text-white text-gray-500" /> // Cross Icon
+                ) : (
+                  <Search className="dark:text-white text-gray-500" /> // Search Icon
+                )}
               </Button>
               <Input
                 placeholder="Search"
                 className="pr-16 w-full focus-visible:ring-1 focus-visible:ring-gray-500 focus-visible:ring-opacity-60"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && searchTerm.trim() && handleSearch()
+                }
               />
             </div>
             <DialogComponent
