@@ -11,7 +11,6 @@ import { handleCopy, maskPassword, sortByOrgName } from "@/lib/utils";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
 
 interface UserCard {
   orgName: string;
