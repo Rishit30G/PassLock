@@ -95,6 +95,7 @@ const DashboardCards = ({
                 variant="outline"
                 onClick={searching ? handleClearSearch : handleSearch}
                 className="absolute right-0 top-0  cursor-pointer border dark:bg-gray-500/20 bg-white dark:hover:bg-gray-500/40 hover:bg-gray-100/30"
+                aria-label={searching ? "Clear search" : "Search"}
               >
                 {searching ? (
                   <X className="dark:text-white text-gray-500" /> // Cross Icon
@@ -142,6 +143,7 @@ const DashboardCards = ({
             loader={<CardSkeleton />}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-10 gap-x-10 gap-10 lg:mx-8 mb-10">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {userCards.map((item: any) => (
                 <Card
                   className="min-h-[180px] w-full rounded-lg border shadow-2xl shadow-blue-500/20 dark:shadow-blue-500/10 relative"
@@ -175,12 +177,14 @@ const DashboardCards = ({
                         }
                         onSuccessfulOperation={fetchDetails}
                       >
-                        <div
+                        <Button
                           className="flex items-center justify-center w-8 h-8 rounded-full bg-black dark:bg-white"
                           onClick={() => setOpenDialogId(item.$id)}
                         >
-                          <ArrowRight className="w-5 h-5 text-white dark:text-black cursor-pointer" />
-                        </div>
+                          <ArrowRight className="w-5 h-5 text-white dark:text-black cursor-pointer" //add aria label
+                             aria-label="Edit details"
+                          />
+                        </Button>
                       </DialogComponent>
                     </div>
                   </CardContent>

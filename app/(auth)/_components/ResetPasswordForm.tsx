@@ -1,7 +1,7 @@
 "use client";
 
 import InputDemo from "@/app/(main)/dashboard/_components/PasswordInput";
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -9,7 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema } from "@/lib/zodSchema/schemas";
 import { resetPassword, updateUserPassword } from "@/actions/users.action";
-import { usePathname, useRouter} from "next/navigation";
+import { useRouter} from "next/navigation";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 

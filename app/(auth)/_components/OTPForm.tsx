@@ -70,7 +70,7 @@ const OTPForm = ({
       if (sessionId) {
         router.push("/dashboard");
       }
-    } catch (error) {
+    } catch{
       toast.error("Incorrect OTP, please check again!");
     } finally {
       setLoading(false);
@@ -84,7 +84,7 @@ const OTPForm = ({
         toast.success("OTP resent successfully");
         setIsResendDisabled(true);
         setTimer(120);
-      } catch (error) {
+      } catch {
         toast.error("Failed to resend OTP. Please try again.");
       }
     }
