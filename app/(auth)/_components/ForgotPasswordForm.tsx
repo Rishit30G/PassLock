@@ -46,7 +46,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <form className='space-y-4 flex !mt-8 flex-col' onSubmit={handleSubmit(onSubmit)}>
-        <p className='text-sm text-gray-500'>Enter your registerd email address and we'll send you a link to reset your password.</p>
+        <p className='text-sm text-gray-500'>Enter your registerd email address and we&lsquo;ll send you a link to reset your password.</p>
       <Input placeholder='Email' {...register('email')} />
         {errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
         <Button className={`w-full flex items-center ${loading && 'text-gray-400'}`} disabled={loading}>
