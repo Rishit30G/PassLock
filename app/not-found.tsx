@@ -1,7 +1,5 @@
-import { ModeToggle } from '@/components/ModeToggle'
 import { ConfettiButton } from '@/components/ui/confetti'
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
 import { Metadata } from "next";
 
