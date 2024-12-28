@@ -47,7 +47,7 @@ export const handleCopy = (text: string) => {
   try {
     navigator.clipboard.writeText(text);
     toast.success("Password copied!");
-  } catch (error) {
+  } catch {
     toast.error("Failed to copy password");
   }
 };
