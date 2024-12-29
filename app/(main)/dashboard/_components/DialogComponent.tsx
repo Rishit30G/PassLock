@@ -111,8 +111,10 @@ const DialogComponent = ({
         toast.success(result.message || "Details created successfully");
       }
       onOpenChange(false);
-      onSuccessfulOperation && onSuccessfulOperation();
-    } catch (error) {
+      if (onSuccessfulOperation) {
+        onSuccessfulOperation();
+      }
+    } catch {
       toast.error("Details failed to save");
     } finally {
       setLoading(false);
@@ -124,7 +126,9 @@ const DialogComponent = ({
       await deleteDetails(itemID);
       toast.success("Details deleted successfully");
       onOpenChange(false);
-      onSuccessfulOperation && onSuccessfulOperation();
+      if (onSuccessfulOperation) {
+        onSuccessfulOperation();
+      }
     } catch (error) {
       toast.error((error as Error)?.message || "Failed to delete");
     } finally {
