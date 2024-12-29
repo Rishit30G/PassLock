@@ -12,7 +12,7 @@ const Header = () => {
     try {
       await signOutUser();
       router.push("/sign-in");
-    } catch (error) {
+    } catch{
       toast.error("Failed to sign out");
     } 
   };
@@ -20,10 +20,10 @@ const Header = () => {
   return (
     <div className="container max-w-7xl mx-auto px-4">
       <div className="flex justify-between items-center pt-5 pb-14">
-        <h4 className="poppins-regulat text-2xl">PassLock</h4>
+        <h4 className="poppins-regular text-2xl">PassLock</h4>
         <div className="flex items-center justify-center gap-5">
           <ModeToggle />
-            <Button type="submit" className="w-9 h-9 cursor-pointer" variant="outline" onClick={handleSubmit}>
+            <Button type="submit" className="w-9 h-9 cursor-pointer" variant="outline" onClick={handleSubmit} aria-label="Sign out">
               <LogOutIcon />
             </Button>
         </div>
