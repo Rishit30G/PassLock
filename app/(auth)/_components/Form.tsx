@@ -157,14 +157,14 @@ const AuthForm = ({ formType }: FormProps) => {
         </Button>
         {formType === "sign-up" ? (
           <p className="text-center text-sm dark:text-gray-500 text-gray-400">
-            Already have an account?{" "}
+            Already have an account ?{" "}
             <Link href="/sign-in" className="dark:text-gray-400 text-gray-500">
               Sign In
             </Link>
           </p>
         ) : (
-          <p className="text-center text-sm text-gray-500">
-            Don't have an account ?{" "}
+          <p className="text-center text-sm dark:text-gray-500 text-gray-400">
+            Don&lsquo;t have an account ?{" "}
             <Link href="/sign-up" className="dark:text-gray-400 text-gray-500">
               Sign Up
             </Link>
