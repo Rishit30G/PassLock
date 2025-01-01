@@ -114,8 +114,8 @@ const DialogComponent = ({
       if (onSuccessfulOperation) {
         onSuccessfulOperation();
       }
-    } catch {
-      toast.error("Details failed to save");
+    } catch (error){
+      toast.error((error as Error)?.message || "Failed to save");
     } finally {
       setLoading(false);
     }
@@ -209,7 +209,7 @@ const DialogComponent = ({
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone. This will permanently delete
-                      the item. 🥹
+                      the item.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
