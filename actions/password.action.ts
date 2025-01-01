@@ -5,6 +5,8 @@ import { appwriteConfig } from "@/lib/appwrite/config";
 import { decrypt, encrypt, parseStringify } from "@/lib/utils";
 import { ID, Query } from "node-appwrite";
 import { getCurrentUser } from "./users.action";
+import { request } from "@arcjet/next";
+import { ajCreate, ajDelete, ajUpdate } from "@/lib/arcjet/arcjet";
 
 interface UserData {
   orgName: string;
@@ -18,6 +20,31 @@ export async function createDetails(
   userId: string,
   accountId: string
 ) {
+  try {
+    const req = await request();
+    const decision = await ajCreate.protect(req, {
+      userId: userId,
+      requested: 1,
+    });
+
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        const { remaining, reset } = decision.reason;
+        console.error({
+          code: "RATE_LIMIT_EXCEEDED",
+          details: {
+            remaining,
+            resetInSeconds: reset,
+          },
+        });
+        throw new Error("Rate limit exceeded");
+      }
+      throw new Error("Request Blocked");
+    }
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Request blocked");
+  }
+
   try {
     const { databases } = await createAdminClient();
     const encryptedPassword = encrypt(data.password);
@@ -109,11 +136,34 @@ export async function getDetails(length: { length: number }) {
   }
 }
 
-export async function updateDetails(
-  documentId: string,
-  data: UserData,
-) {
+export async function updateDetails(documentId: string, data: UserData) {
   const { databases } = await createAdminClient();
+  const { accountId } = await getCurrentUser();
+  try {
+    const req = await request();
+    const decision = await ajUpdate.protect(req, {
+      userId: accountId,
+      requested: 1,
+    });
+
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        const { remaining, reset } = decision.reason;
+        console.error({
+          code: "RATE_LIMIT_EXCEEDED",
+          details: {
+            remaining,
+            resetInSeconds: reset,
+          },
+        });
+        throw new Error("Rate limit exceeded. Please try again later.");
+      }
+      throw new Error("Request Blocked");
+    }
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Request blocked");
+  }
+
   try {
     await databases.updateDocument(
       appwriteConfig.databaseId,
@@ -134,6 +184,33 @@ export async function updateDetails(
 
 export async function deleteDetails(documentId: string) {
   const { databases } = await createAdminClient();
+  const { accountId } = await getCurrentUser();
+
+  try {
+    const req = await request();
+    const decision = await ajDelete.protect(req, {
+      userId: accountId,
+      requested: 1,
+    });
+
+    if (decision.isDenied()) {
+      if (decision.reason.isRateLimit()) {
+        const { remaining, reset } = decision.reason;
+        console.error({
+          code: "RATE_LIMIT_EXCEEDED",
+          details: {
+            remaining,
+            resetInSeconds: reset,
+          },
+        });
+        throw new Error("Rate limit exceeded. Please try again later.");
+      }
+      throw new Error("Request blocked. Access denied.");
+    }
+  } catch (error) {
+    throw new Error((error as Error)?.message || "Request blocked");
+  }
+
   try {
     await databases.deleteDocument(
       appwriteConfig.databaseId,
