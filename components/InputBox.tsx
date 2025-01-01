@@ -5,9 +5,9 @@ import { Copy, Check } from "lucide-react"; // Icons for copy and success
 import { useState } from "react";
 
 type InputCopiedProps = {
-  register: ReturnType<typeof Object>; // Accepts register props
-  value: string; // Dynamically passed value (e.g., `watch("orgUrl")`)
-  placeholder: string; // Placeholder for the input
+  register: ReturnType<typeof Object>;
+  value: string; 
+  placeholder: string; 
 };
 
 export default function InputCopied({ register, value, placeholder }: InputCopiedProps) {
@@ -40,9 +40,9 @@ export default function InputCopied({ register, value, placeholder }: InputCopie
           aria-label={isCopied ? "Copied" : "Copy text"}
         >
           {isCopied ? (
-            <Check className="w-4 h-4 text-green-500" /> // Green check icon
+            <Check className="w-4 h-4 text-green-500" /> 
           ) : (
-            <Copy className="w-4 h-4" /> // Clipboard icon
+            <Copy className="w-4 h-4" /> 
           )}
         </button>
       </span>
