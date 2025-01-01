@@ -134,7 +134,7 @@ const DashboardCards = ({
             <CardSkeleton />
           </div>
         ) : userCards.length === 0 && !loading && !searching ? (
-          <p className="text-center py-10 text-gray-500">No Results Found</p>
+          <p className="text-center poppins-regular py-40 text-gray-400 text-3xl">Nothing Here 🔐</p>
         ) : (
           <InfiniteScroll
             dataLength={userCards.length}
