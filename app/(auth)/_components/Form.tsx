@@ -130,7 +130,7 @@ const AuthForm = ({ formType }: FormProps) => {
         )}
         {formType === "sign-in" && (
           <Link
-            className="text-sm dark:text-gray-400 text-gray-500 text-right !mt-3"
+            className="text-sm dark:text-white/60 text-black/60 text-right !mt-3"
             href="/forgot-password"
           >
             Forgot Password ?
@@ -160,16 +160,16 @@ const AuthForm = ({ formType }: FormProps) => {
           {loading && <Loader2 className="w-6 h-6 ml-2 animate-spin" />}
         </Button>
         {formType === "sign-up" ? (
-          <p className="text-center text-sm dark:text-gray-500 text-gray-400">
+          <p className="text-center text-sm dark:text-white/50 text-black/50">
             Already have an account ?{" "}
-            <Link href="/sign-in" className="dark:text-gray-400 text-gray-500">
+            <Link href="/sign-in" className="dark:text-white/70 text-black/70">
               Sign In
             </Link>
           </p>
         ) : (
-          <p className="text-center text-sm dark:text-gray-500 text-gray-400">
+          <p className="text-center text-sm dark:text-white/50 text-black/50">
             Don&lsquo;t have an account ?{" "}
-            <Link href="/sign-up" className="dark:text-gray-400 text-gray-500">
+            <Link href="/sign-up" className="dark:text-white/70 text-black/70">
               Sign Up
             </Link>
           </p>
