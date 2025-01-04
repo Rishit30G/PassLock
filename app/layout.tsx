@@ -6,6 +6,21 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "PassLock",
   description: "A locking app for your passwords, providing secure storage and easy access to all your credentials. Keep your passwords safe and organized with advanced encryption and user-friendly features.",
+  openGraph: {
+    title: "PassLock", 
+    description: "PassLock is a secure password manager that keeps your passwords safe and organized. It provides secure storage and easy access to all your credentials.",
+    type: "website",
+    images: [
+      {
+        url: "https://i.postimg.cc/pL7NvWBw/Suspended-Golden-Key.jpg",
+        width: 1800,
+        height: 830,
+        alt: "PassLock",
+      },
+    ],
+    url: "https://passlock.vercel.app",
+    locale: "en_US",
+  }
 };
 
 export default function RootLayout({
