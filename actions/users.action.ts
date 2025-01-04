@@ -12,7 +12,7 @@ export const sendEmailOTP = async (email: string) => {
     const session = await account.createEmailToken(ID.unique(), email);
     return session.userId;
   } catch (error) {
-    throw new Error("Failed to send OTP");
+    throw new Error((error as Error)?.message || "Failed to send OTP");
   }
 };
 
@@ -34,7 +34,7 @@ export const verifySecret = async ({
     });
     return parseStringify({ sessionId: session.$id });
   } catch (error) {
-    throw new Error("Failed to verify OTP");
+    throw new Error((error as Error)?.message || "Failed to verify OTP");
   }
 };
 
@@ -135,16 +135,16 @@ export const signOutUser = async () => {
     await account.deleteSession("current");
     (await cookies()).delete("appwrite-session");
   } catch (error) {
-    throw new Error("Failed to sign out");
+    throw new Error((error as Error)?.message || "Failed to sign out");
   } 
 };
 
 export const recoveryPassword = async (email: string) => {
   const { account } = await createAdminClient();
   try {
-    await account.createRecovery(email, "http://localhost:3000/reset-password");
+    await account.createRecovery(email, "https://passlock.vercel.app/reset-password");
   } catch (error) {
-    throw new Error("Sorry, we don't have an account with that email address");
+    throw new Error((error as Error)?.message || "Email does not exist");
   }
 };
 
