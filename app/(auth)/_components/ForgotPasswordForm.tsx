@@ -40,7 +40,6 @@ const ForgotPasswordForm = () => {
     try {
       await recoveryPassword(userEmail);
       setShowModal(true);
-      // router.push('/reset-password');
     } catch (error) {
       toast.error((error as Error)?.message || "Email not sent, try again!");
     } finally {
