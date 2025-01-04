@@ -32,9 +32,9 @@ export const ajCreate = arcjet({
   rules: [
     tokenBucket({
       mode: "LIVE",
-      refillRate: 100, 
-      interval: 86400, 
-      capacity: 100,
+      refillRate: 50, 
+      interval: 631152000, 
+      capacity: 50,
     }),
   ],
 });
