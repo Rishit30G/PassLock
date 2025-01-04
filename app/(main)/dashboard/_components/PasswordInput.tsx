@@ -27,6 +27,7 @@ export default function InputDemo({ register, setMonkeyState, placeholder }: Inp
       <span className="relative">
         <Input
           {...register} 
+          id="password"
           className="pe-9"
           placeholder={placeholder}
           type={isVisible ? "text" : "password"}
