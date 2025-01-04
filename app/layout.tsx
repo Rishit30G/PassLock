@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "PassLock",
-  description: "A locking app for your passwords",
+  description: "A locking app for your passwords, providing secure storage and easy access to all your credentials. Keep your passwords safe and organized with advanced encryption and user-friendly features.",
 };
 
 export default function RootLayout({
