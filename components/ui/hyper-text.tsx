@@ -25,20 +25,18 @@ interface HyperTextProps extends MotionProps {
   characterSet?: CharacterSet;
 }
 
-const DEFAULT_CHARACTER_SET = Object.freeze(
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),
-) as readonly string[];
+const DEFAULT_CHARACTER_SET = "ABCDEFGHIJKLMNOP".split("");
+const DEFAULT_TEXT_END = "$$!@2&9%^";
 
 const getRandomInt = (max: number): number => Math.floor(Math.random() * max);
 
 export default function HyperText({
   children,
   className,
-  duration = 800,
+  duration = 1600,
   delay = 0,
   as: Component = "div",
   startOnView = false,
-  animateOnHover = true,
   characterSet = DEFAULT_CHARACTER_SET,
   ...props
 }: HyperTextProps) {
@@ -46,19 +44,25 @@ export default function HyperText({
     forwardMotionProps: true,
   });
 
-  const [displayText, setDisplayText] = useState<string[]>(() =>
-    children.split(""),
-  );
+  const [displayText, setDisplayText] = useState<string[]>(children.split(""));
   const [isAnimating, setIsAnimating] = useState(false);
+  const [targetText, setTargetText] = useState<string[]>(children.split(""));
   const iterationCount = useRef(0);
   const elementRef = useRef<HTMLElement>(null);
 
   const handleAnimationTrigger = () => {
-    if (animateOnHover && !isAnimating) {
+    if (!isAnimating) {
       iterationCount.current = 0;
       setIsAnimating(true);
     }
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleAnimationTrigger();
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Handle animation start based on view or delay
   useEffect(() => {
@@ -78,7 +82,7 @@ export default function HyperText({
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: "-30% 0px -30% 0px" },
+      { threshold: 0.1, rootMargin: "-30% 0px -30% 0px" }
     );
 
     if (elementRef.current) {
@@ -92,7 +96,7 @@ export default function HyperText({
   useEffect(() => {
     if (!isAnimating) return;
 
-    const intervalDuration = duration / (children.length * 10);
+    const intervalDuration = duration / (children.length * 8);
     const maxIterations = children.length;
 
     const interval = setInterval(() => {
@@ -102,25 +106,28 @@ export default function HyperText({
             letter === " "
               ? letter
               : index <= iterationCount.current
-                ? children[index]
-                : characterSet[getRandomInt(characterSet.length)],
-          ),
+                ? targetText[index]
+                : characterSet[getRandomInt(characterSet.length)]
+          )
         );
-        iterationCount.current = iterationCount.current + 0.1;
+        iterationCount.current += 0.1;
       } else {
         setIsAnimating(false);
         clearInterval(interval);
+        // Toggle between children and DEFAULT_TEXT_END
+        setTargetText((prev) =>
+          prev.join("") === children ? DEFAULT_TEXT_END.split("") : children.split("")
+        );
       }
     }, intervalDuration);
 
     return () => clearInterval(interval);
-  }, [children, duration, isAnimating, characterSet]);
+  }, [children, duration, isAnimating, characterSet, targetText]);
 
   return (
     <MotionComponent
       ref={elementRef}
       className={cn("overflow-hidden py-2 text-4xl font-bold", className)}
-      onMouseEnter={handleAnimationTrigger}
       {...props}
     >
       <AnimatePresence>
@@ -129,7 +136,7 @@ export default function HyperText({
             key={index}
             className={cn("font-mono", letter === " " ? "w-3" : "")}
           >
-            {letter.toUpperCase()}
+            {letter}
           </motion.span>
         ))}
       </AnimatePresence>
