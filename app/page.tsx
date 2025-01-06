@@ -1,5 +1,3 @@
-// "use client"
-
 import { AnimatedShinyTextDemo } from "@/components/AnimateShinyText";
 import { ModeToggle } from "@/components/ModeToggle";
 import { RainbowButton } from "@/components/ui/rainbow-button";
@@ -24,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import Testimonial from "@/components/Testimonial";
 
 const LandingPage = () => {
+
   return (
     <div className="container max-w-7xl mx-auto px-4 my-4">
       {/* Header */}
@@ -41,7 +40,7 @@ const LandingPage = () => {
       <section className="flex flex-col items-center justify-center gap-4 min-h-screen">
         <AnimatedShinyTextDemo />
         <h1 className="text-8xl poppins-bold max-lg:text-6xl">PassLock</h1>
-        <p className="text-xl poppins-regular text-zinc-700 dark:text-zinc-400">
+        <p className="text-xl poppins-regular text-zinc-700 dark:text-zinc-400 text-center">
           Simplest way to store your passwords.
         </p>
         <Image
@@ -58,7 +57,7 @@ const LandingPage = () => {
 
       {/* Why Trust Us */}
       <section
-        className="flex items-center justify-between pt-10 max-lg:flex-col"
+        className="flex items-start justify-between pt-10 max-lg:flex-col"
         id="trust"
       >
         <div className="flex flex-col gap-4 w-[60%] max-lg:w-[100%]">
@@ -73,7 +72,7 @@ const LandingPage = () => {
           </p>
         </div>
         <div className="w-[30%] text-center max-lg:w-[100%] max-lg: mt-20">
-          <HyperText className="text-6xl text-zinc-800"> Password </HyperText>
+          <HyperText className="text-6xl text-zinc-800 uppercase"> Password </HyperText>
         </div>
       </section>
 
@@ -198,7 +197,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="mt-20 mb-10 flex justify-end">
+      <footer className="mt-20 mb-10 flex justify-center max-lg:justify-center">
         <h3 className="text-center text-lg poppins-extralight text-zinc-600">
           © {new Date().getFullYear()} PassLock
         </h3>
