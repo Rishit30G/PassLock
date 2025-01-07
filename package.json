@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
   },
   "dependencies": {
     "@arcjet/next": "^1.0.0-alpha.34",
@@ -29,6 +30,7 @@
     "embla-carousel-autoplay": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
     "framer-motion": "^11.13.3",
+    "husky": "^9.1.7",
     "input-otp": "^1.4.1",
     "lucide-react": "^0.468.0",
     "motion": "^11.15.0",
