@@ -15,7 +15,6 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Card , CardContent} from './ui/card';
-import Image from 'next/image';
 
 const Testimonial = () => {
     return (
