@@ -31,11 +31,11 @@ const Testimonial = () => {
 
     >
       <CarouselContent className='px-3 py-2'>
-          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
-              <Card className='min-h-[200px] pt-6 shadow-lg'>
+          <CarouselItem className='basis-1/2 max-lg:basis-full p-3'>
+              <Card className='min-h-[160px] pt-6 shadow-lg'>
                 <CardContent className='flex flex-col justify-between'>
-                  <p className="text-md italic text-zinc-500">
-                    PassLock has made managing my passwords so much easier. The UI is intuitive, and I love how secure it feels with end-to-end encryption.
+                  <p className="text-md italic text-zinc-500 dark:text-gray-400">
+                    PassLock has made managing my passwords so much easier. I love how secure it feels with end-to-end encryption.
                     </p>
                   <div className="flex items-center justify-end gap-2 mt-4">
                   <Avatar>
@@ -50,10 +50,10 @@ const Testimonial = () => {
                 </CardContent>
               </Card>
           </CarouselItem>
-          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
-              <Card className='min-h-[200px] pt-6 shadow-lg'>
+          <CarouselItem className='basis-1/2 max-lg:basis-full p-3'>
+              <Card className='min-h-[160px] pt-6 shadow-lg'>
                 <CardContent className='flex flex-col justify-between'>
-                  <p className="text-md italic text-zinc-500">
+                  <p className="text-md italic text-zinc-500 dark:text-gray-400">
                   PassLock is exactly what I needed! Its straightforward, easy to use, and I can access my saved passwords without hassle.
                     </p>
                   <div className="flex items-center justify-end gap-2 mt-4">
@@ -69,10 +69,10 @@ const Testimonial = () => {
                 </CardContent>
               </Card>
           </CarouselItem>
-          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
-              <Card className='min-h-[200px] pt-6 shadow-lg'>
+          <CarouselItem className='basis-1/2 max-lg:basis-full p-3'>
+              <Card className='min-h-[160px] pt-6 shadow-lg'>
                 <CardContent className='flex flex-col justify-between'>
-                  <p className="text-md italic text-zinc-500">
+                  <p className="text-md italic text-zinc-500 dark:text-gray-400">
                   I appreciate the simplicity and security PassLock provides. Knowing my passwords are hashed and safe gives me peace of mind.
                     </p>
                   <div className="flex items-center justify-end gap-2 mt-4">
@@ -88,10 +88,10 @@ const Testimonial = () => {
                 </CardContent>
               </Card>
           </CarouselItem>
-          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
-              <Card className='min-h-[200px] pt-6 shadow-lg'>
+          <CarouselItem className='basis-1/2 max-lg:basis-full p-3'>
+              <Card className='min-h-[160px] pt-6 shadow-lg'>
                 <CardContent className='flex flex-col justify-between'>
-                  <p className="text-md italic text-zinc-500">
+                  <p className="text-md italic text-zinc-500 dark:text-gray-400">
                   As someone who handles multiple accounts daily, PassLock is a lifesaver. Its fast, reliable, and the search functionality is on point!
                     </p>
                   <div className="flex items-center justify-end gap-2 mt-4">
