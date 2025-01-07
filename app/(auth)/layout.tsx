@@ -4,19 +4,32 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { FlipWords } from "@/components/ui/flip-words";
 import Image from "next/image";
 import { ConfettiButton } from "@/components/ui/confetti";
+import { useEffect, useState } from "react";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [imageSrc, setImageSrc] = useState("/sign-up/sign-up.jpeg");
+
+  useEffect(() => {
+    const images = [
+      "/sign-up/sign-up-1.jpeg",
+      "/sign-up/sign-up-2.jpeg",
+      "/sign-up/sign-up-3.jpeg",
+      "/sign-up/sign-up-4.jpeg",
+    ];
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+    setImageSrc(randomImage);
+  }, []);
   return (
     <div className="min-h-screen flex relative">
       <div className="absolute top-[10px] right-[10px] z-10">
         <ModeToggle />
       </div>
       <Image
-        src="/sign-up.jpeg"
+        src={imageSrc}
         alt="logo"
         className="h-[100vh] basis-1/2 object-cover max-2xl:hidden"
         height={1200}
