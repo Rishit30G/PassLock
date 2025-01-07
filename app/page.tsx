@@ -155,29 +155,29 @@ const LandingPage = () => {
         <h1 className="text-5xl poppins-semibold mb-4">FAQs</h1>
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger className="text-lg max-md:text-md">
+            <AccordionTrigger className="text-lg max-md:text-sm">
               Is PassLock free to use ?
             </AccordionTrigger>
-            <AccordionContent className="text-lg text-zinc-600 dark:text-zinc-400">
+            <AccordionContent className="text-lg text-zinc-600 dark:text-zinc-400 max-md:text-sm">
               Yes, PassLock is free to use for a limited time, allowing users
               to store up to 50 passwords.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger className="text-lg max-md:text-md">
+            <AccordionTrigger className="text-lg max-md:text-sm">
               What happens if I forget my PassLock account password ?
             </AccordionTrigger>
-            <AccordionContent className="text-lg text-zinc-600 dark:text-zinc-400">
+            <AccordionContent className="text-lg text-zinc-600 dark:text-zinc-400 max-md:text-sm">
               If you forget your password, you can use the Forgot Password
               option to reset it. A magic link will be sent to your registered
               email, allowing you to securely set a new password.
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
-            <AccordionTrigger className="text-lg max-md:text-md">
+            <AccordionTrigger className="text-lg max-md:text-sm">
               Can PassLock access my passwords ?
             </AccordionTrigger>
-            <AccordionContent className="text-lg text-zinc-600 dark:text-zinc-400">
+            <AccordionContent className="text-lg text-zinc-600 dark:text-zinc-400 max-md:text-sm">
               No, PassLock cannot access your passwords. All passwords are
               encrypted and stored securely. Only you, with your valid session,
               can decrypt and view them.
