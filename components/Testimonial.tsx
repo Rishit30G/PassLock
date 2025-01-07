@@ -14,85 +14,106 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { Card , CardContent} from './ui/card';
+import Image from 'next/image';
 
 const Testimonial = () => {
     return (
       <Carousel
-        opts={{
-          align: "start",
-        }}
-        plugins={[
-          Autoplay({
-            delay: 3000,
-          }),
-        ]}
-        className='px-5'
-      >
-        <CarouselContent className='p-7 gap-6'>
-            <CarouselItem className='basis-1/2 shadow-lg p-8 max-lg:basis-full min-h-[200px] flex flex-col justify-between'>
-              <p className="text-md italic text-zinc-500">
-              PassLock has made managing my passwords so much easier. The UI is intuitive, and I love how secure it feels with end-to-end encryption.
-              </p>
-              <div className="flex items-center justify-end gap-2 mt-4">
-              <Avatar>
-                <AvatarImage src="/user/youngman.png" alt="avatar"  className='object-contain w-full h-full'  />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-                <div>
-                  <h1 className="text-md poppins-semibold">John Carter</h1>
-                  <p className="text-sm text-zinc-500">Software Engineer</p>
-                </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className='basis-1/2 shadow-lg p-8 max-lg:basis-full min-h-[200px] flex flex-col justify-between'>
-              <p className="text-md italic text-zinc-500">
-              PassLock is exactly what I needed! Its straightforward, easy to use, and I can access my saved passwords without hassle.
-              </p>
-              <div className="flex items-center justify-end gap-2 mt-4">
-              <Avatar>
-                <AvatarImage src="/user/officewomen.png" alt="avatar"   className='object-contain w-full h-full' />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-                <div>
+      opts={{
+        align: "start",
+      }}
+      className="w-full"
+      plugins={[
+        Autoplay({
+          delay: 3000,
+        }),
+      ]}
+
+    >
+      <CarouselContent className='px-3 py-2'>
+          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
+              <Card className='min-h-[200px] pt-6 shadow-lg'>
+                <CardContent className='flex flex-col justify-between'>
+                  <p className="text-md italic text-zinc-500">
+                    PassLock has made managing my passwords so much easier. The UI is intuitive, and I love how secure it feels with end-to-end encryption.
+                    </p>
+                  <div className="flex items-center justify-end gap-2 mt-4">
+                  <Avatar>
+                    <AvatarImage src="/user/1.png" alt="avatar" className='object-contain w-full h-full'  />
+                    <AvatarFallback>JC</AvatarFallback>
+                  </Avatar>
+                    <div>
+                      <h1 className="text-md poppins-semibold">John Carter</h1>
+                      <p className="text-sm text-zinc-500">Software Engineer</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+          </CarouselItem>
+          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
+              <Card className='min-h-[200px] pt-6 shadow-lg'>
+                <CardContent className='flex flex-col justify-between'>
+                  <p className="text-md italic text-zinc-500">
+                  PassLock is exactly what I needed! Its straightforward, easy to use, and I can access my saved passwords without hassle.
+                    </p>
+                  <div className="flex items-center justify-end gap-2 mt-4">
+                  <Avatar>
+                    <AvatarImage src="/user/4.png" alt="avatar"  className='object-contain w-full h-full' />
+                    <AvatarFallback>SN</AvatarFallback>
+                  </Avatar>
+                 <div>
                   <h1 className="text-md poppins-semibold">Sophia Nguyen</h1>
                   <p className="text-sm text-zinc-500">Freelance Designer</p>
                 </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className='basis-1/2 shadow-lg p-8 max-lg:basis-full min-h-[200px] flex flex-col justify-between'>
-              <p className="text-md italic text-zinc-500">
-              I appreciate the simplicity and security PassLock provides. Knowing my passwords are hashed and safe gives me peace of mind.
-              </p>
-              <div className="flex items-center justify-end gap-2 mt-4">
-                <Avatar>
-                  <AvatarImage src="/user/oldman.png" alt="avatar"   className='object-contain w-full h-full' />
-                  <AvatarFallback>CN</AvatarFallback>
+                  </div>
+                </CardContent>
+              </Card>
+          </CarouselItem>
+          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
+              <Card className='min-h-[200px] pt-6 shadow-lg'>
+                <CardContent className='flex flex-col justify-between'>
+                  <p className="text-md italic text-zinc-500">
+                  I appreciate the simplicity and security PassLock provides. Knowing my passwords are hashed and safe gives me peace of mind.
+                    </p>
+                  <div className="flex items-center justify-end gap-2 mt-4">
+                  <Avatar>
+                  <AvatarImage src="/user/2.png" alt="avatar"   className='object-contain w-full h-full' />
+                  <AvatarFallback>DL</AvatarFallback>
                 </Avatar>
                 <div>
                   <h1 className="text-md poppins-semibold">David Lee</h1>
                   <p className="text-sm text-zinc-500">Director</p>
                 </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem className='basis-1/2 shadow-lg p-8 max-lg:basis-full min-h-[200px] flex flex-col justify-between'>
-              <p className="text-md italic text-zinc-500">
-              As someone who handles multiple accounts daily, PassLock is a lifesaver. Its fast, reliable, and the search functionality is on point!
-              </p>
-              <div className="flex items-center justify-end gap-2 mt-4">
-              <Avatar>
-                <AvatarImage src="/user/youngwomen.png" alt="avatar"  className='object-contain w-full h-full'/>
-                <AvatarFallback>CN</AvatarFallback>
+                  </div>
+                </CardContent>
+              </Card>
+          </CarouselItem>
+          <CarouselItem className='basis-1/3 max-lg:basis-full p-3'>
+              <Card className='min-h-[200px] pt-6 shadow-lg'>
+                <CardContent className='flex flex-col justify-between'>
+                  <p className="text-md italic text-zinc-500">
+                  As someone who handles multiple accounts daily, PassLock is a lifesaver. Its fast, reliable, and the search functionality is on point!
+                    </p>
+                  <div className="flex items-center justify-end gap-2 mt-4">
+                  <Avatar>
+                <AvatarImage src="/user/3.png" alt="avatar"  className='object-contain w-full h-full'/>
+                <AvatarFallback>PS</AvatarFallback>
               </Avatar>
                 <div>
                   <h1 className="text-md poppins-semibold">Priya Sharma</h1>
                   <p className="text-sm text-zinc-500"> Digital Marketer</p>
                 </div>
-              </div>
-            </CarouselItem>
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+                  </div>
+                </CardContent>
+              </Card>
+          </CarouselItem>
+        
+      </CarouselContent>
+      <CarouselPrevious className='max-lg:hidden' />
+      <CarouselNext className='max-lg:hidden'/>
+      
+    </Carousel>
     )
 }
 
