@@ -32,6 +32,10 @@ const Dashboard = () => {
     async function getUserDetails() {
       try {
         const result = await getCurrentUser();
+        if (typeof result === "object" && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
         setUser(result);
       } catch (error) {
         toast.error((error as Error)?.message || "User not found!");

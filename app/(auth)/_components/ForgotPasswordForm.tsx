@@ -38,7 +38,11 @@ const ForgotPasswordForm = () => {
     setLoading(true);
     const userEmail = values.email;
     try {
-      await recoveryPassword(userEmail);
+      const result = await recoveryPassword(userEmail);
+      if (typeof result === "object" && "error" in result) {
+        toast.error(result.error);
+        return;
+      }
       setShowModal(true);
     } catch (error) {
       toast.error((error as Error)?.message || "Email not sent, try again!");

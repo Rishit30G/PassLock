@@ -51,21 +51,27 @@ const AuthForm = ({ formType }: FormProps) => {
       try {
         //@ts-expect-error - password is not undefined
         const result = await createAccount(values);
+        if (typeof result === "object" && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
         toast.success(result.message);
         router.push("/sign-in");
-      } catch (error) {
-        toast.error((error as Error)?.message || "Failed to create account");
       } finally {
         setLoading(false);
       }
     } else if (formType === "sign-in") {
       try {
-        const { message, accountId } = await getAccount(values);
+        const result = await getAccount(values);
+        if (typeof result === "object" && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
+        const { message, accountId } = result;
         toast.success(message);
         setShowModal(true);
+        //@ts-expect-error - accountId is not undefined
         setAccountId(accountId);
-      } catch (error) {
-        toast.error((error as Error)?.message || "Failed to sign in");
       } finally {
         setLoading(false);
       }

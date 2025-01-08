@@ -11,8 +11,8 @@ export const sendEmailOTP = async (email: string) => {
   try {
     const session = await account.createEmailToken(ID.unique(), email);
     return session.userId;
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to send OTP");
+  } catch {
+    return { error: "Failed to send OTP" };
   }
 };
 
@@ -34,7 +34,7 @@ export const verifySecret = async ({
     });
     return parseStringify({ sessionId: session.$id });
   } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to verify OTP");
+    return { error: "Incorrect OTP, please check again!" };
   }
 };
 
@@ -48,9 +48,12 @@ const getUserByEmail = async (email: string) => {
   return result.total > 0 ? result.documents[0] : null;
 };
 
-export const createAccount = async (
-  data: { email: string; password: string; firstName: string; lastName: string }
-) => {
+export const createAccount = async (data: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}) => {
   try {
     const userEmail = data.email;
 
@@ -81,7 +84,7 @@ export const createAccount = async (
     );
     return parseStringify({ message: "Account created successfully" });
   } catch (error) {
-    throw new Error((error as Error)?.message || "Something went wrong");
+    return { error: "Account creation was unsuccessful" };
   }
 };
 
@@ -91,7 +94,7 @@ export const getAccount = async (data: { email: string; password: string }) => {
 
     const existingUser = await getUserByEmail(email);
     if (!existingUser) {
-      throw new Error("User does not exist");
+      return { error: "User does not exist " };
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -99,17 +102,17 @@ export const getAccount = async (data: { email: string; password: string }) => {
       existingUser.password
     );
     if (!isPasswordValid) {
-      throw new Error("Invalid email or password");
+      return { error: "Invalid email or password" };
     }
 
     const accountId = await sendEmailOTP(email);
     if (!accountId) {
-      throw new Error("Failed to send OTP");
+      return { error: "Failed to send OTP" };
     }
 
     return { message: "OTP sent successfully", accountId: accountId };
   } catch (error) {
-    throw new Error((error as Error)?.message || "Something went wrong");
+    return { error: "Something went wrong" };
   }
 };
 
@@ -125,7 +128,7 @@ export const getCurrentUser = async () => {
     if (user.total <= 0) return null;
     return parseStringify(user.documents[0]);
   } catch (error) {
-    throw new Error((error as Error)?.message || "Something went wrong");
+    return { error: "User not found!" };
   }
 };
 
@@ -135,16 +138,19 @@ export const signOutUser = async () => {
     await account.deleteSession("current");
     (await cookies()).delete("appwrite-session");
   } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to sign out");
-  } 
+    return { error: "Failed to sign out" };
+  }
 };
 
 export const recoveryPassword = async (email: string) => {
   const { account } = await createAdminClient();
   try {
-    await account.createRecovery(email, "https://passlock.vercel.app/reset-password");
+    await account.createRecovery(
+      email,
+      "https://passlock.vercel.app/reset-password"
+    );
   } catch (error) {
-    throw new Error((error as Error)?.message || "Email does not exist");
+    return { error: "Email does not exist" };
   }
 };
 
@@ -159,13 +165,13 @@ export const getDocumentIdfromUserId = async (userId: string) => {
     if (result.total <= 0) return null;
     return result.documents[0].$id;
   } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to get document id");
+    return { error: (error as Error)?.message || "Failed to get document id" };
   }
 };
 
 export const updateUserPassword = async (userId: string, password: string) => {
   const { databases } = await createAdminClient();
-  const documentId = await getDocumentIdfromUserId(userId) as string;
+  const documentId = (await getDocumentIdfromUserId(userId)) as string;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await databases.updateDocument(
@@ -175,7 +181,7 @@ export const updateUserPassword = async (userId: string, password: string) => {
       { password: hashedPassword }
     );
   } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to update password");
+    return { error: "Failed to update password" };
   }
 };
 
@@ -188,6 +194,6 @@ export const resetPassword = async (
   try {
     await account.updateRecovery(userId, secret, password);
   } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to reset password");
+    return { error: "Password not reset, try again!" };
   }
 };

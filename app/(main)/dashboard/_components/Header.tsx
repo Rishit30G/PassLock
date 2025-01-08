@@ -10,7 +10,11 @@ const Header = () => {
   const router = useRouter();
   const handleSubmit = async () => {
     try {
-      await signOutUser();
+      const result = await signOutUser();
+      if (typeof result === "object" && "error" in result) {
+        toast.error(result.error);
+        return;
+      }
       router.push("/sign-in");
     } catch{
       toast.error("Failed to sign out");

@@ -66,12 +66,13 @@ const OTPForm = ({
     e.preventDefault();
     try {
       const sessionId = await verifySecret({ accountId, password });
-
+      if (typeof sessionId === "object" && "error" in sessionId) {
+        toast.error(sessionId.error);
+        return;
+      }
       if (sessionId) {
         router.push("/dashboard");
       }
-    } catch{
-      toast.error("Incorrect OTP, please check again!");
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,11 @@ const OTPForm = ({
   const handleResendOTP = async () => {
     if (!isResendDisabled) {
       try {
-        await sendEmailOTP(email);
+        const result = await sendEmailOTP(email);
+        if (typeof result === "object" && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
         toast.success("OTP resent successfully");
         setIsResendDisabled(true);
         setTimer(120);
@@ -100,19 +105,24 @@ const OTPForm = ({
               <AlertDialogDescription className="space-y-4 text-center">
                 Please enter the OTP sent to your registered email
               </AlertDialogDescription>
-              <InputOTP maxLength={6} value={password} onChange={setPassword} autoFocus>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                  </InputOTPGroup>
-                  <InputOTPSeparator />
-                  <InputOTPGroup>
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
+              <InputOTP
+                maxLength={6}
+                value={password}
+                onChange={setPassword}
+                autoFocus
+              >
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
             </AlertDialogHeader>
             <AlertDialogFooter className="!flex !flex-col justify-center items-center gap-4">
               <div

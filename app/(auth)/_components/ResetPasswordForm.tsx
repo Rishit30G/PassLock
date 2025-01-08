@@ -9,7 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema } from "@/lib/zodSchema/schemas";
 import { resetPassword, updateUserPassword } from "@/actions/users.action";
-import { useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
@@ -33,20 +33,25 @@ const ResetPasswordForm = () => {
 
   async function onSubmit(values: z.infer<typeof schema>) {
     setLoading(true);
-    const password = values.password; 
+    const password = values.password;
     const userId = searchParams.get("userId") as string;
     const secret = searchParams.get("secret") as string;
-    try{
-      await resetPassword(userId, secret, password);
-      await updateUserPassword(userId, password);
+    try {
+      const result = await resetPassword(userId, secret, password);
+      if (typeof result === "object" && "error" in result) {
+        toast.error(result.error);
+        return;
+      }
+      const updateResult = await updateUserPassword(userId, password);
+      if (typeof updateResult === "object" && "error" in updateResult) {
+        toast.error(updateResult.error);
+        return;
+      }
       toast.success("Password reset successfully");
       router.push("/sign-in");
-    }catch(error){
-      toast.error((error as Error)?.message || "Password not reset, try again!");
-    }finally{
+    } finally {
       setLoading(false);
     }
-
   }
 
   return (
