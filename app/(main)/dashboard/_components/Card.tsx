@@ -49,19 +49,11 @@ const DashboardCards = ({
   }, []);
 
   const fetchMoreData = useCallback(async () => {
-    try {
-      const details = await getDetails({ length: userCards.length });
-      if (typeof details === "object" && "error" in details) {
-        toast.error(details.error);
-        return;
-      }
+      const details =  await getDetails({ length: userCards.length });
       setUserCards((prev) => [...prev, ...details.result]);
       if (details.result.length === 0) {
         setHasMore(false);
       }
-    } catch (error) {
-      toast.error((error as Error)?.message || "Failed to fetch data");
-    }
   }, [userCards.length, setUserCards, setHasMore]);
 
   useEffect(() => {
