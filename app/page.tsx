@@ -28,7 +28,9 @@ const LandingPage = () => {
     <div className="container max-w-7xl mx-auto px-4 my-4">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl poppins-regular">PassLock</h1>
+        <h1 className="text-2xl poppins-regular">
+          <Link href="/" className="cursor-pointer">PassLock</Link>
+        </h1>
         <div className="flex items-center gap-4">
           <RainbowButton className="cursor-pointer px-8 py-2 max-lg:px-4">
             <Link href="/sign-up">Get Started</Link>
@@ -212,7 +214,7 @@ const LandingPage = () => {
       {/* Footer */}
       <div className="container max-w-7xl mx-auto px-4 my-4">
       <footer className="my-5 flex justify-center max-lg:justify-center">
-        <h3 className="text-center text-lg poppins-extralight text-zinc-600 dark:text-zinc-300">
+        <h3 className="text-center text-lg poppins-light text-zinc-600 dark:text-zinc-300">
           © {new Date().getFullYear()} PassLock
         </h3>
       </footer>
