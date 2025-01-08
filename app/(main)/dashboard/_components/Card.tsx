@@ -35,6 +35,10 @@ const DashboardCards = ({
     setLoading(true);
     try {
       const details = await getDetails({ length: 0 });
+      if (typeof details === "object" && "error" in details) {
+        toast.error(details.error);
+        return;
+      }
       setUserCards(details.result);
       setHasMore(details.result.length > 0);
     } catch (error) {
@@ -47,6 +51,10 @@ const DashboardCards = ({
   const fetchMoreData = useCallback(async () => {
     try {
       const details = await getDetails({ length: userCards.length });
+      if (typeof details === "object" && "error" in details) {
+        toast.error(details.error);
+        return;
+      }
       setUserCards((prev) => [...prev, ...details.result]);
       if (details.result.length === 0) {
         setHasMore(false);
@@ -68,6 +76,10 @@ const DashboardCards = ({
     setLoading(true);
     try {
       const details = await getSearchDetails(searchTerm.trim());
+      if (typeof details === "object" && "error" in details) {
+        toast.error(details.error);
+        return;
+      }
       const sortedResults = sortByOrgName(details.result || []);
       setUserCards(sortedResults);
       setHasMore(false);

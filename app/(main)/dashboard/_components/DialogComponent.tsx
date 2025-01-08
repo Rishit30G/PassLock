@@ -105,9 +105,17 @@ const DialogComponent = ({
       let result;
       if (item?.$id) {
         result = await updateDetails(item.$id, values);
+        if (typeof result === "object" && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
         toast.success(result.message || "Details updated successfully");
       } else {
         result = await createDetails(values, userId, accountId);
+        if (typeof result === "object" && "error" in result) {
+          toast.error(result.error);
+          return;
+        }
         toast.success(result.message || "Details created successfully");
       }
       onOpenChange(false);
@@ -123,7 +131,11 @@ const DialogComponent = ({
 
   async function handleDelete(itemID: string) {
     try {
-      await deleteDetails(itemID);
+      const result = await deleteDetails(itemID);
+      if (typeof result === "object" && "error" in result) {
+        toast.error(result.error);
+        return;
+      }
       toast.success("Details deleted successfully");
       onOpenChange(false);
       if (onSuccessfulOperation) {

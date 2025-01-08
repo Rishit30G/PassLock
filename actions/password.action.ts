@@ -37,12 +37,10 @@ export async function createDetails(
             resetInSeconds: reset,
           },
         });
-        throw new Error("Rate limit exceeded");
       }
-      throw new Error("Request Blocked");
     }
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Request blocked");
+  } catch {
+    return { error: "Rate limit exceeded. Please try again later" };
   }
 
   try {
@@ -62,8 +60,8 @@ export async function createDetails(
       }
     );
     return parseStringify({ message: "Details created successfully" });
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Something went wrong");
+  } catch {
+    return { error: "Details creation was unsuccessful" };
   }
 }
 
@@ -100,8 +98,8 @@ export async function getSearchDetails(searchTerm: string) {
     } else {
       return { message: "No matching results found" };
     }
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Failed to perform search");
+  } catch {
+    return { error: "Failed to perform search" };
   }
 }
 
@@ -131,8 +129,8 @@ export async function getDetails(length: { length: number }) {
     }));
 
     return parseStringify({ result });
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Details not fetched");
+  } catch {
+    return { error: "Details not fetched" };
   }
 }
 
@@ -156,12 +154,10 @@ export async function updateDetails(documentId: string, data: UserData) {
             resetInSeconds: reset,
           },
         });
-        throw new Error("Rate limit exceeded. Please try again later.");
       }
-      throw new Error("Request Blocked");
     }
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Request blocked");
+  } catch {
+    return { error: "Rate limit exceeded. Please try again later" };
   }
 
   try {
@@ -177,8 +173,8 @@ export async function updateDetails(documentId: string, data: UserData) {
       }
     );
     return parseStringify({ message: "Details updated successfully" });
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Details not updated");
+  } catch {
+    return { error: "Details not updated" };
   }
 }
 
@@ -203,12 +199,10 @@ export async function deleteDetails(documentId: string) {
             resetInSeconds: reset,
           },
         });
-        throw new Error("Rate limit exceeded. Please try again later.");
       }
-      throw new Error("Request blocked. Access denied.");
     }
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Request blocked");
+  } catch {
+    return { error: "Rate limit exceeded. Please try again later" };
   }
 
   try {
@@ -218,7 +212,7 @@ export async function deleteDetails(documentId: string) {
       documentId
     );
     return parseStringify({ message: "Details deleted successfully" });
-  } catch (error) {
-    throw new Error((error as Error)?.message || "Details not deleted");
+  } catch {
+    return { error: "Details deletion was unsuccessful" };
   }
 }
