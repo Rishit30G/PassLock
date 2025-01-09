@@ -24,7 +24,7 @@ export default function InputDemo({ register, setMonkeyState, placeholder }: Inp
 
   return (
     <div className="space-y-4">
-      <span className="relative">
+      <div className="relative">
         <Input
           {...register} 
           id="password"
@@ -48,7 +48,7 @@ export default function InputDemo({ register, setMonkeyState, placeholder }: Inp
             <EyeOff className="w-4 h-4" />
           )}
         </button>
-      </span>
+      </div>
     </div>
   );
 }

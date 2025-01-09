@@ -25,7 +25,7 @@ export default function InputCopied({ register, value, placeholder }: InputCopie
 
   return (
     <div className="space-y-4">
-      <span className="relative">
+      <div className="relative">
         <Input
           {...register} 
           value={value} 
@@ -45,7 +45,7 @@ export default function InputCopied({ register, value, placeholder }: InputCopie
             <Copy className="w-4 h-4" /> 
           )}
         </button>
-      </span>
+      </div>
     </div>
   );
 }
