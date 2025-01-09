@@ -1,9 +1,21 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import maintenanceConfig from '@/maintenance.json';
+
+const maintenancePaths = ['/maintenance', '/_next', '/api'];
 
 export async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const authToken = (await cookies()).get("appwrite-session");
+
+  if(maintenancePaths.some(path => pathname.startsWith(path))) {
+    return NextResponse.next();
+  }
+
+  if (maintenanceConfig.enabled) {
+    const maintenanceUrl = new URL("/maintenance", request.url);
+    return NextResponse.redirect(maintenanceUrl);
+  }
 
   if (pathname.startsWith("/dashboard")) {
     if (!authToken) {
