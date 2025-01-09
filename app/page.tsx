@@ -56,6 +56,7 @@ const LandingPage = () => {
             width={500}
             height={500}
             alt="lock"
+            loading="eager"
             className="animate-bounce-slow"
           />
           <Link href="#trust">

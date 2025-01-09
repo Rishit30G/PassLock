@@ -31,6 +31,7 @@ export default function Layout({
       <Image
         src={imageSrc}
         alt="logo"
+        loading="eager"
         className="h-[100vh] basis-1/2 object-cover max-2xl:hidden"
         height={1200}
         width={1200}
