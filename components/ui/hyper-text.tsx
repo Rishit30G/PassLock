@@ -26,7 +26,7 @@ interface HyperTextProps extends MotionProps {
 }
 
 const DEFAULT_CHARACTER_SET = "ABCDEFGHIJKLMNOP".split("");
-const DEFAULT_TEXT_END = "$$!@2&9%^";
+const DEFAULT_TEXT_END = "$!@2&9%^";
 
 const getRandomInt = (max: number): number => Math.floor(Math.random() * max);
 
