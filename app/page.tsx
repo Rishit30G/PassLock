@@ -78,11 +78,11 @@ const LandingPage = () => {
                 Why trust us ?
               </h2>
               <p className="poppins-light text-xl text-zinc-500 leading-8 dark:text-zinc-400 max-lg:text-center">
-                PassLock protects your passwords with cutting-edge end-to-end
-                encryption, offering unparalleled security and privacy. Enjoy a
+                PassLock protects your passwords with cutting-edge <span className="poppins-medium">end-to-end
+                encryption</span>, offering unparalleled security and privacy. Enjoy a
                 seamless and intuitive experience while managing your passwords
-                with ease, and rest assured knowing your data is accessible only
-                to you.
+                with ease, and rest assured knowing your <span className="poppins-medium">data is accessible only
+                to you.</span>
               </p>
             </div>
             <div className="w-[40%] max-lg:w-[100%]">
