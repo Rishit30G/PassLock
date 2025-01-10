@@ -24,9 +24,8 @@ import Testimonial from "@/components/Testimonial";
 const LandingPage = () => {
   return (
     <>
-     
       <div className="container max-w-7xl mx-auto px-4 my-4">
-       <div className="absolute top-0 left-[20%] h-[100px] w-[60%] rounded-t-full bg-[rgba(122,246,250,0.5)] opacity-70 dark:opacity-50 blur-[100px] max-lg:hidden"></div>
+        <div className="absolute top-0 left-[20%] h-[100px] w-[60%] rounded-t-full bg-[rgba(122,246,250,0.5)] opacity-70 dark:opacity-50 blur-[100px] max-lg:hidden"></div>
         {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl poppins-regular">
@@ -41,7 +40,7 @@ const LandingPage = () => {
             <ModeToggle />
           </div>
         </div>
-        </div>
+      </div>
 
       {/* Hero */}
       <div className="container max-w-7xl mx-auto px-4 my-4">
@@ -74,7 +73,7 @@ const LandingPage = () => {
             className="flex items-center justify-between max-lg:flex-col max-lg:gap-10"
             id="trust"
           >
-            <div className="flex flex-col gap-4 w-[60%] max-lg:w-[100%]">
+            <div className="flex flex-col gap-4 w-[60%] max-lg:w-[100%] max-lg:pt-20">
               <h2 className="poppins-regular text-5xl max-lg:text-center">
                 Why trust us ?
               </h2>
@@ -90,9 +89,7 @@ const LandingPage = () => {
               <div className="h-[28rem] w-full dark:bg-[#151515] bg-[#ffffff98] dark:bg-grid-white/[0.2] bg-grid-black/[0.09] relative flex items-center justify-center">
                 {/* Radial gradient for the container to give a faded look */}
                 <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-[#151515] bg-[#f9f9f998] [mask-image:radial-gradient(ellipse_at_center,transparent_1%,black)]"></div>
-                  <HyperText className="text-6xl uppercase">
-                     Password
-                </HyperText>
+                <HyperText className="text-6xl uppercase">Password</HyperText>
               </div>
             </div>
           </section>
