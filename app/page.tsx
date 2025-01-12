@@ -234,9 +234,9 @@ const LandingPage = () => {
       {/* Footer */}
       <div className="container max-w-7xl mx-auto px-4 my-4">
         <footer className="my-5 flex justify-center max-lg:justify-center">
-          <h3 className="text-center text-lg poppins-light text-zinc-600 dark:text-zinc-300">
+          <h4 className="text-center text-lg poppins-light text-zinc-600 dark:text-zinc-300">
             © {new Date().getFullYear()} PassLock
-          </h3>
+          </h4>
         </footer>
       </div>
     </>
