@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## PassLock 🔐
 
-## Getting Started
+PassLock is an application that helps user to securly store their passwords. 
 
-First, run the development server:
+#### Tech Stack used 
+- Next JS
+- Tailwind CSS 
+- Appwrite 
+- React Hook Forms 
+- Zod 
+- ArcJet
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Folder Structure 
+- Actions 
+    - password.action.ts: Necessary operations for passwords 
+    - users.action.ts: Necessary operations required for user crud operations
+- App 
+    - (auth): Sign In, Sign Up, Forgot Password, Reset Password 
+    - (main): Dashboard Page
+    - maintenance: Maintenance Page 
+    - not-found.tsx: 404 Page 
+    - page.tsx: Landing Page for PassLock 
+- Components 
+    - UI: Contains UI Components for MagicUI, shadcn, Accternity UI 
+    - Other .tsx files: Contains Reusuable compoents 
+- Hooks 
+    - use-toast: shadcn use-toast hook
+- Lib 
+    - appwrite: Appwrite setup 
+    - arcjet: Arcjet setup 
+    - zodSchema: zod schema 
+    - utils.ts: Contains utility function 
+- Public: 
+    - Contains images for PassLock 
+- Maintenance JSON: For toggling on and off when PassLock is under maintenance 
+- Changelog MD: For adding the changelog for every release 
+- Middleware.ts: Contains all the re-routing logic 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
