@@ -25,7 +25,7 @@ const LandingPage = () => {
   return (
     <>
       <div className="container max-w-7xl mx-auto px-4 my-4">
-        <div className="absolute top-0 left-[20%] h-[100px] w-[60%] rounded-t-full bg-[rgba(122,246,250,0.5)] opacity-70 dark:opacity-50 blur-[100px] max-lg:hidden"></div>
+        <div className="absolute top-0 left-[20%] h-[100px] w-[60%] rounded-t-full bg-[rgba(122,246,250,0.5)] opacity-70 dark:opacity-50 blur-[100px] max-lg:hidden lg:w-[20%] lg:left-[40%]"></div>
         {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl poppins-regular">
